@@ -7,12 +7,40 @@
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
     
-    <script>
-        window.onerror = function(message, source, lineno, colno, error) {
-            alert("⚠️ عطل في الجافا سكريبت:\n" + message + "\nالسطر رقم: " + lineno);
-            return false;
-        };
-    </script>
+    <style>
+        /* حركة العداد لما يكبّر ويصغّر */
+        .pop-animation {
+            transform: scale(1.2);
+            color: #40916c !important;
+            transition: all 0.1s ease-in-out;
+        }
+        #counter-view {
+            transition: all 0.1s ease-in-out;
+            display: inline-block;
+        }
+        /* تصميم الفليكس لأزرار الآية */
+        .verse-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        /* ستايل إشعار النسخ */
+        .toast-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1b4332;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
@@ -30,7 +58,11 @@
                 "إِنَّ مَعَ الْعُسْرِ يُسْرًا"
             </p>
             <p id="verse-surah" style="font-size: 0.85rem; color: #888; margin-bottom: 15px;">[سورة الشرح: 6]</p>
-            <button class="btn" id="next-verse-btn" style="width: auto; padding: 8px 20px;">آية أخرى 🔁</button>
+            
+            <div class="verse-actions">
+                <button class="btn" id="next-verse-btn" style="width: auto; padding: 8px 15px;">آية أخرى 🔁</button>
+                <button class="btn" id="copy-verse-btn" style="background-color: #40916c; width: auto; padding: 8px 15px;">نسخ الآية 📋</button>
+            </div>
         </div>
 
         <div class="card">
@@ -64,8 +96,7 @@
         </div>
 
         <div class="card">
-            <div class="card-icon">📿</div>
-            <h3>السبحة الإلكترونية</h3>
+            <div class="card-icon">📿</div><h3>السبحة الإلكترونية</h3>
             <h2 id="counter-view" style="font-size: 3rem; color: #2d6a4f; margin: 10px 0;">0</h2> 
             <p style="margin-bottom: 15px;">اضغط على الزرار للتسبيح</p>
             
@@ -77,23 +108,32 @@
 
     </main>
 
+    <div id="toast" class="toast-notification">تم نسخ الآية بنجاح! ❤️</div>
+
     <script>
+        // 1. برمجة السبحة والذاكرة مع تأثير الأنميشن
         var count = 0;
         try {
             if (localStorage.getItem('myTasbeehCount')) {
                 count = parseInt(localStorage.getItem('myTasbeehCount')) || 0;
             }
-        } catch(e) {
-            console.log("الذاكرة محجوبة");
-        }
+        } catch(e) {}
 
         var counterView = document.getElementById('counter-view');
         if (counterView) counterView.textContent = count;
 
-        var tasbeehBtn = document.getElementById('tasbeeh-btn');if (tasbeehBtn) {
+        var tasbeehBtn = document.getElementById('tasbeeh-btn');
+        if (tasbeehBtn) {
             tasbeehBtn.addEventListener('click', function() {
                 count++;
-                if (counterView) counterView.textContent = count;
+                if (counterView) {
+                    counterView.textContent = count;
+                    // تشغيل الأنميشن
+                    counterView.classList.add('pop-animation');
+                    setTimeout(function() {
+                        counterView.classList.remove('pop-animation');
+                    }, 100);
+                }
                 try { localStorage.setItem('myTasbeehCount', count); } catch(e) {}
             });
         }
@@ -109,6 +149,7 @@
             });
         }
 
+        // 2. برمجة آية وتدبر وميزة النسخ
         var versesList = [
             { text: "«إِنَّ مَعَ الْعُسْرِ يُسْرًا»", source: "[سورة الشرح: 6]" },
             { text: "«وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ»", source: "[سورة الطلاق: 3]" },
@@ -121,6 +162,8 @@
         var verseTextEl = document.getElementById('quran-verse');
         var verseSourceEl = document.getElementById('verse-surah');
         var nextVerseBtn = document.getElementById('next-verse-btn');
+        var copyVerseBtn = document.getElementById('copy-verse-btn');
+        var toast = document.getElementById('toast');
 
         if (nextVerseBtn) {
             nextVerseBtn.addEventListener('click', function() {
@@ -131,6 +174,24 @@
             });
         }
 
+        // برمجة زرار نسخ الآية لـ الحافظة (Clipboard)
+        if (copyVerseBtn) {
+            copyVerseBtn.addEventListener('click', function() {
+                var textToCopy = verseTextEl.textContent + " " + verseSourceEl.textContent + " - تم النسخ من تطبيق زاد المسلم";
+                
+                // أمر النسخ السحري
+                navigator.clipboard.writeText(textToCopy).then(function() {// إظهار إشعار تم النسخ
+                    if (toast) {
+                        toast.style.display = 'block';
+                        setTimeout(function() { toast.style.display = 'none'; }, 2000);
+                    }
+                }).catch(function() {
+                    alert("عذراً، لم نتمكن من نسخ النص.");
+                });
+            });
+        }
+
+        // 3. جلب مواقيت الصلاة أونلاين
         function useFallback() {
             if(document.getElementById('fajr')) document.getElementById('fajr').textContent = "04:15";
             if(document.getElementById('sunrise')) document.getElementById('sunrise').textContent = "05:55";
@@ -153,17 +214,14 @@
                         if(document.getElementById('sunrise')) document.getElementById('sunrise').textContent = timings.Sunrise;
                         if(document.getElementById('dhuhr')) document.getElementById('dhuhr').textContent = timings.Dhuhr;
                         if(document.getElementById('asr')) document.getElementById('asr').textContent = timings.Asr;
-                        if(document.getElementById('maghrib')) document.getElementById('maghrib').textContent = timings.Maghrib;if(document.getElementById('isha')) document.getElementById('isha').textContent = timings.Isha;
+                        if(document.getElementById('maghrib')) document.getElementById('maghrib').textContent = timings.Maghrib;
+                        if(document.getElementById('isha')) document.getElementById('isha').textContent = timings.Isha;
                         if(document.getElementById('prayer-date')) {
                             document.getElementById('prayer-date').textContent = dateInfo.hijri.day + " " + dateInfo.hijri.month.ar + " " + dateInfo.hijri.year + " هـ | " + dateInfo.gregorian.date;
                         }
-                    } else {
-                        useFallback();
-                    }
+                    } else { useFallback(); }
                 })
-                .catch(function(err) {
-                    useFallback();
-                });
+                .catch(function(err) { useFallback(); });
         }
 
         getLivePrayerTimes();
