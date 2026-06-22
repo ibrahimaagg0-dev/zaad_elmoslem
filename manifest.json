@@ -1,0 +1,16 @@
+﻿{
+  "name": "تطبيق زاد المسلم",
+  "short_name": "زاد المسلم",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f4f7f5",
+  "theme_color": "#1b4332",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2913/2913374.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
