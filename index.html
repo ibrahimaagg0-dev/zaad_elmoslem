@@ -7,8 +7,9 @@
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
     
+    <!-- الستايلات الإضافية للميزات الجديدة والحركات -->
     <style>
-        /* حركة العداد لما يكبّر ويصغّر */
+        /* حركة العداد لما يكبّر ويصغّر مع التسبيح */
         .pop-animation {
             transform: scale(1.2);
             color: #40916c !important;
@@ -18,14 +19,14 @@
             transition: all 0.1s ease-in-out;
             display: inline-block;
         }
-        /* تصميم الفليكس لأزرار الآية */
+        /* تنسيق أزرار كارت الآية */
         .verse-actions {
             display: flex;
             gap: 10px;
             justify-content: center;
             margin-top: 15px;
         }
-        /* ستايل إشعار النسخ */
+        /* ستايل إشعار تم النسخ */
         .toast-notification {
             position: fixed;
             bottom: 20px;
@@ -44,6 +45,7 @@
 </head>
 <body>
 
+    <!-- الهيدر (رأس الصفحة) -->
     <header class="main-header">
         <h1>زَادُ المُسْلِم</h1>
         <p>رفيقك اليومي للطاعات والذكر</p>
@@ -51,6 +53,7 @@
 
     <main class="container">
         
+        <!-- كارت آية وتدبر -->
         <div class="card" style="border-right: 5px solid #2d6a4f;">
             <div class="card-icon">📖</div>
             <h3>آية وتدبر</h3>
@@ -65,6 +68,7 @@
             </div>
         </div>
 
+        <!-- كارت مواقيت الصلاة -->
         <div class="card">
             <div class="card-icon">🕌</div>
             <h3>مواقيت الصلاة اليوم</h3>
@@ -81,6 +85,7 @@
             <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">📍 القاهرة، مصر</p>
         </div>
 
+        <!-- كارت أذكار الصباح -->
         <div class="card">
             <div class="card-icon">☀️</div>
             <h3>أذكار الصباح</h3>
@@ -88,15 +93,16 @@
             <a href="sabah.html" class="btn" style="text-decoration: none; display: block;">اقرأ الآن</a>
         </div>
 
+        <!-- كارت أذكار المساء -->
         <div class="card">
             <div class="card-icon">🌙</div>
             <h3>أذكار المساء</h3>
             <p>حصن نفسك ونم في طمأنينة</p>
             <a href="masa.html" class="btn" style="text-decoration: none; display: block;">اقرأ الآن</a>
-        </div>
-
+        </div><!-- كارت السبحة الإلكترونية -->
         <div class="card">
-            <div class="card-icon">📿</div><h3>السبحة الإلكترونية</h3>
+            <div class="card-icon">📿</div>
+            <h3>السبحة الإلكترونية</h3>
             <h2 id="counter-view" style="font-size: 3rem; color: #2d6a4f; margin: 10px 0;">0</h2> 
             <p style="margin-bottom: 15px;">اضغط على الزرار للتسبيح</p>
             
@@ -108,10 +114,12 @@
 
     </main>
 
+    <!-- عنصر إشعار النسخ -->
     <div id="toast" class="toast-notification">تم نسخ الآية بنجاح! ❤️</div>
 
+    <!-- كود التشغيل والبرمجة بالكامل -->
     <script>
-        // 1. برمجة السبحة والذاكرة مع تأثير الأنميشن
+        // ==================== [ 1. برمجة السبحة والذاكرة والأنميشن ] ====================
         var count = 0;
         try {
             if (localStorage.getItem('myTasbeehCount')) {
@@ -128,7 +136,6 @@
                 count++;
                 if (counterView) {
                     counterView.textContent = count;
-                    // تشغيل الأنميشن
                     counterView.classList.add('pop-animation');
                     setTimeout(function() {
                         counterView.classList.remove('pop-animation');
@@ -149,10 +156,10 @@
             });
         }
 
-        // 2. برمجة آية وتدبر وميزة النسخ
+        // ==================== [ 2. برمجة آية وتدبر وميزة النسخ ] ====================
         var versesList = [
             { text: "«إِنَّ مَعَ الْعُسْرِ يُسْرًا»", source: "[سورة الشرح: 6]" },
-            { text: "«وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ»", source: "[سورة الطلاق: 3]" },
+            { text: "«وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُВО حَسْبُهُ»", source: "[سورة الطلاق: 3]" },
             { text: "«أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ»", source: "[سورة الرعد: 28]" },
             { text: "«وَقُل رَّبِّ زِدْنِي عِلْمًا»", source: "[سورة طه: 114]" },
             { text: "«إِنَّ اللَّهَ مَعَ الصَّابِرِينَ»", source: "[سورة البقرة: 153]" },
@@ -174,13 +181,9 @@
             });
         }
 
-        // برمجة زرار نسخ الآية لـ الحافظة (Clipboard)
         if (copyVerseBtn) {
             copyVerseBtn.addEventListener('click', function() {
-                var textToCopy = verseTextEl.textContent + " " + verseSourceEl.textContent + " - تم النسخ من تطبيق زاد المسلم";
-                
-                // أمر النسخ السحري
-                navigator.clipboard.writeText(textToCopy).then(function() {// إظهار إشعار تم النسخ
+                var textToCopy = verseTextEl.textContent + " " + verseSourceEl.textContent + " - تم النسخ من تطبيق زاد المسلم";navigator.clipboard.writeText(textToCopy).then(function() {
                     if (toast) {
                         toast.style.display = 'block';
                         setTimeout(function() { toast.style.display = 'none'; }, 2000);
@@ -191,7 +194,7 @@
             });
         }
 
-        // 3. جلب مواقيت الصلاة أونلاين
+        // ==================== [ 3. جلب مواقيت الصلاة أونلاين والوضع الاحتياطي ] ====================
         function useFallback() {
             if(document.getElementById('fajr')) document.getElementById('fajr').textContent = "04:15";
             if(document.getElementById('sunrise')) document.getElementById('sunrise').textContent = "05:55";
@@ -225,6 +228,13 @@
         }
 
         getLivePrayerTimes();
+
+        // ==================== [ 4. تفعيل وتشغيل الـ Service Worker للأوفلاين ] ====================
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+            .then(function() { console.log('Service Worker Registered!'); })
+            .catch(function(err) { console.log('Service Worker Failed', err); });
+        }
     </script>
 </body>
 </html>
