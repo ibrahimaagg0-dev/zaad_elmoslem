@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أذكار الصباح</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="index.html" style="color: white; text-decoration: none; float: right; font-size: 1.2rem;">🔙</a>
+        <h1>أذكار الصباح</h1>
+        <p>الحصن الحصين للمسلم</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="zikr-card" onclick="countDown(this)">
+            <p class="zikr-text">"أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ"</p>
+            <div class="zikr-count">التكرار: <span class="badge">1</span></div>
+        </div>
+
+        <div class="zikr-card" onclick="countDown(this)">
+            <p class="zikr-text">"قُلْ هُوَ اللَّهُ أَحَدٌ، اللَّهُ الصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ"</p>
+            <div class="zikr-count">التكرار: <span class="badge">3</span></div>
+        </div>
+
+        <div class="zikr-card" onclick="countDown(this)">
+            <p class="zikr-text">"اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ"</p>
+            <div class="zikr-count">التكرار: <span class="badge">1</span></div>
+        </div>
+
+    </div>
+
+    <script>
+        function countDown(element) {
+            const badge = element.querySelector('.badge');
+            let currentCount = parseInt(badge.textContent);
+
+            if (currentCount > 0) {
+                currentCount--;
+                badge.textContent = currentCount;
+            }
+
+            if (currentCount === 0) {
+                element.style.backgroundColor = '#e8f5e9';
+                element.style.borderColor = '#4caf50';
+                element.style.opacity = '0.7';
+            }
+        }
+    </script>
+</body>
+</html>
