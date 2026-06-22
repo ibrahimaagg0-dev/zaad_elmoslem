@@ -6,6 +6,13 @@
     <title>تطبيق زاد المسلم</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
+    
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            alert("⚠️ عطل في الجافا سكريبت:\n" + message + "\nالسطر رقم: " + lineno);
+            return false;
+        };
+    </script>
 </head>
 <body>
 
@@ -71,43 +78,38 @@
     </main>
 
     <script>
-        // 1. برمجة السبحة والذاكرة بأمان مضاعف لحالات الحجب
-        let count = 0;
+        var count = 0;
         try {
-            if (window.localStorage && localStorage.getItem('myTasbeehCount')) {
+            if (localStorage.getItem('myTasbeehCount')) {
                 count = parseInt(localStorage.getItem('myTasbeehCount')) || 0;
             }
-        } catch (e) {
-            console.log("الذاكرة المحلية محجوبة في هذا المتصفح");
+        } catch(e) {
+            console.log("الذاكرة محجوبة");
         }
 
-        const counterView = document.getElementById('counter-view');
+        var counterView = document.getElementById('counter-view');
         if (counterView) counterView.textContent = count;
 
-        const tasbeehBtn = document.getElementById('tasbeeh-btn');
-        if (tasbeehBtn) {
-            tasbeehBtn.addEventListener('click', () => {
+        var tasbeehBtn = document.getElementById('tasbeeh-btn');if (tasbeehBtn) {
+            tasbeehBtn.addEventListener('click', function() {
                 count++;
                 if (counterView) counterView.textContent = count;
-                try {
-                    if (window.localStorage) localStorage.setItem('myTasbeehCount', count);
-                } catch (e) {}
+                try { localStorage.setItem('myTasbeehCount', count); } catch(e) {}
             });
-        }const resetBtn = document.getElementById('reset-btn');
+        }
+
+        var resetBtn = document.getElementById('reset-btn');
         if (resetBtn) {
-            resetBtn.addEventListener('click', () => {
-                if(confirm("هل تريد تصفير عداد السبحة؟")) {
+            resetBtn.addEventListener('click', function() {
+                if (confirm("هل تريد تصفير عداد السبحة؟")) {
                     count = 0;
                     if (counterView) counterView.textContent = count;
-                    try {
-                        if (window.localStorage) localStorage.setItem('myTasbeehCount', count);
-                    } catch (e) {}
+                    try { localStorage.setItem('myTasbeehCount', count); } catch(e) {}
                 }
             });
         }
 
-        // 2. برمجة آية وتدبر
-        const versesList = [
+        var versesList = [
             { text: "«إِنَّ مَعَ الْعُسْرِ يُسْرًا»", source: "[سورة الشرح: 6]" },
             { text: "«وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ»", source: "[سورة الطلاق: 3]" },
             { text: "«أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ»", source: "[سورة الرعد: 28]" },
@@ -116,65 +118,54 @@
             { text: "«وَإِذَا سَأَلَكَ عِبَادِي عَنِّي فَإِنِّي قَرِيبٌ»", source: "[سورة البقرة: 186]" }
         ];
 
-        const verseTextEl = document.getElementById('quran-verse');
-        const verseSourceEl = document.getElementById('verse-surah');
-        const nextVerseBtn = document.getElementById('next-verse-btn');
+        var verseTextEl = document.getElementById('quran-verse');
+        var verseSourceEl = document.getElementById('verse-surah');
+        var nextVerseBtn = document.getElementById('next-verse-btn');
 
         if (nextVerseBtn) {
-            nextVerseBtn.addEventListener('click', () => {
-                const randomIndex = Math.floor(Math.random() * versesList.length);
-                const randomVerse = versesList[randomIndex];
+            nextVerseBtn.addEventListener('click', function() {
+                var randomIndex = Math.floor(Math.random() * versesList.length);
+                var randomVerse = versesList[randomIndex];
                 if (verseTextEl) verseTextEl.textContent = randomVerse.text;
                 if (verseSourceEl) verseSourceEl.textContent = randomVerse.source;
             });
         }
 
-        // 3. جلب مواقيت الصلاة أونلاين أو الانتقال الفوري للاحتياطي
-        function getLivePrayerTimes() {
-            const city = "Cairo";
-            const country = "Egypt";
-            const method = 5; 
-            const apiUrl = https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=${method};
-
-            fetch(apiUrl)
-                .then(response => {
-                    if (!response.ok) throw new Error('فشل الشبكة');
-                    return response.json();
-                })
-                .then(data => {
-                    if(data && data.code === 200 && data.data) {
-                        const timings = data.data.timings;
-                        const dateInfo = data.data.date;
-
-                        if(document.getElementById('fajr')) document.getElementById('fajr').textContent = timings.Fajr;
-                        if(document.getElementById('sunrise')) document.getElementById('sunrise').textContent = timings.Sunrise;
-                        if(document.getElementById('dhuhr')) document.getElementById('dhuhr').textContent = timings.Dhuhr;
-                        if(document.getElementById('asr')) document.getElementById('asr').textContent = timings.Asr;
-                        if(document.getElementById('maghrib')) document.getElementById('maghrib').textContent = timings.Maghrib;
-                        if(document.getElementById('isha')) document.getElementById('isha').textContent = timings.Isha;
-
-                        if(document.getElementById('prayer-date') && dateInfo) {
-                            document.getElementById('prayer-date').textContent = 
-                                ${dateInfo.hijri.day} ${dateInfo.hijri.month.ar} ${dateInfo.hijri.year} هـ | ${dateInfo.gregorian.date};
-                        }
-                    } else {
-                        useFallback();
-                    }
-                })
-                .catch(error => {
-                    console.log("تم تفعيل الوضع الاحتياطي الذكي");
-                    useFallback();
-                });
-        }function useFallback() {
+        function useFallback() {
             if(document.getElementById('fajr')) document.getElementById('fajr').textContent = "04:15";
             if(document.getElementById('sunrise')) document.getElementById('sunrise').textContent = "05:55";
             if(document.getElementById('dhuhr')) document.getElementById('dhuhr').textContent = "12:00";
             if(document.getElementById('asr')) document.getElementById('asr').textContent = "03:30";
             if(document.getElementById('maghrib')) document.getElementById('maghrib').textContent = "07:00";
             if(document.getElementById('isha')) document.getElementById('isha').textContent = "08:30";
-            if(document.getElementById('prayer-date')) document.getElementById('prayer-date').textContent = "مواقيت القاهرة المحلية (وضع الاحتياط)";
+            if(document.getElementById('prayer-date')) document.getElementById('prayer-date').textContent = "مواقيت القاهرة (وضع الاحتياط)";
         }
-        
+
+        function getLivePrayerTimes() {
+            var apiUrl = "https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5";
+            fetch(apiUrl)
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (data && data.code === 200 && data.data) {
+                        var timings = data.data.timings;
+                        var dateInfo = data.data.date;
+                        if(document.getElementById('fajr')) document.getElementById('fajr').textContent = timings.Fajr;
+                        if(document.getElementById('sunrise')) document.getElementById('sunrise').textContent = timings.Sunrise;
+                        if(document.getElementById('dhuhr')) document.getElementById('dhuhr').textContent = timings.Dhuhr;
+                        if(document.getElementById('asr')) document.getElementById('asr').textContent = timings.Asr;
+                        if(document.getElementById('maghrib')) document.getElementById('maghrib').textContent = timings.Maghrib;if(document.getElementById('isha')) document.getElementById('isha').textContent = timings.Isha;
+                        if(document.getElementById('prayer-date')) {
+                            document.getElementById('prayer-date').textContent = dateInfo.hijri.day + " " + dateInfo.hijri.month.ar + " " + dateInfo.hijri.year + " هـ | " + dateInfo.gregorian.date;
+                        }
+                    } else {
+                        useFallback();
+                    }
+                })
+                .catch(function(err) {
+                    useFallback();
+                });
+        }
+
         getLivePrayerTimes();
     </script>
 </body>
