@@ -9,7 +9,6 @@
 </head>
 <body>
 
-    <!-- الهيدر (رأس الصفحة) -->
     <header class="main-header">
         <h1>زَادُ المُسْلِم</h1>
         <p>رفيقك اليومي للطاعات والذكر</p>
@@ -17,7 +16,6 @@
 
     <main class="container">
         
-        <!-- كارت آية وتدبر -->
         <div class="card" style="border-right: 5px solid #2d6a4f;">
             <div class="card-icon">📖</div>
             <h3>آية وتدبر</h3>
@@ -28,7 +26,6 @@
             <button class="btn" id="next-verse-btn" style="width: auto; padding: 8px 20px;">آية أخرى 🔁</button>
         </div>
 
-        <!-- كارت مواقيت الصلاة -->
         <div class="card">
             <div class="card-icon">🕌</div>
             <h3>مواقيت الصلاة اليوم</h3>
@@ -37,7 +34,7 @@
             <div class="prayer-times-grid">
                 <div class="prayer-item"><span>الفجر</span> <b id="fajr">-:-</b></div>
                 <div class="prayer-item"><span>الشروق</span> <b id="sunrise">-:-</b></div>
-                <div class="prayer-item"><span>الظهر</span> <b id="dhuhr">-:-</b></div>
+                <div class="prayer-item ="><span>الظهر</span> <b id="dhuhr">-:-</b></div>
                 <div class="prayer-item"><span>العصر</span> <b id="asr">-:-</b></div>
                 <div class="prayer-item"><span>المغرب</span> <b id="maghrib">-:-</b></div>
                 <div class="prayer-item"><span>العشاء</span> <b id="isha">-:-</b></div>
@@ -45,7 +42,6 @@
             <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">📍 القاهرة، مصر</p>
         </div>
 
-        <!-- كارت أذكار الصباح -->
         <div class="card">
             <div class="card-icon">☀️</div>
             <h3>أذكار الصباح</h3>
@@ -53,7 +49,6 @@
             <a href="sabah.html" class="btn" style="text-decoration: none; display: block;">اقرأ الآن</a>
         </div>
 
-        <!-- كارت أذكار المساء -->
         <div class="card">
             <div class="card-icon">🌙</div>
             <h3>أذكار المساء</h3>
@@ -61,7 +56,6 @@
             <a href="masa.html" class="btn" style="text-decoration: none; display: block;">اقرأ الآن</a>
         </div>
 
-        <!-- كارت السبحة الإلكترونية -->
         <div class="card">
             <div class="card-icon">📿</div>
             <h3>السبحة الإلكترونية</h3>
@@ -76,7 +70,93 @@
 
     </main>
 
-    <!-- الربط بملف السكريبت الخارجي -->
-    <script src="script.js"></script>
+    <script>
+        // 1. برمجة السبحة والذاكرة
+        const tasbeehBtn = document.getElementById('tasbeeh-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const counterView = document.getElementById('counter-view');
+
+        let count = localStorage.getItem('myTasbeehCount') ? parseInt(localStorage.getItem('myTasbeehCount')) : 0;
+        counterView.textContent = count;
+
+        tasbeehBtn.addEventListener('click', () => {
+            count++;
+            counterView.textContent = count;
+            localStorage.setItem('myTasbeehCount', count);
+        });
+
+        resetBtn.addEventListener('click', () => {
+            if(confirm("هل تريد تصفير عداد السبحة؟")) {
+                count = 0;
+                counterView.textContent = count;// 2. برمجة آية وتدبر
+        const versesList = [
+            { text: "«إِنَّ مَعَ الْعُسْرِ يُسْرًا»", source: "[سورة الشرح: 6]" },
+            { text: "«وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ»", source: "[سورة الطلاق: 3]" },
+            { text: "«أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ»", source: "[سورة الرعد: 28]" },
+            { text: "«وَقُل رَّبِّ زِدْنِي عِلْمًا»", source: "[سورة طه: 114]" },
+            { text: "«إِنَّ اللَّهَ مَعَ الصَّابِرِينَ»", source: "[سورة البقرة: 153]" },
+            { text: "«وَإِذَا سَأَلَكَ عِبَادِي عَنِّي فَإِنِّي قَرِيبٌ»", source: "[سورة البقرة: 186]" }
+        ];
+
+        const verseTextEl = document.getElementById('quran-verse');
+        const verseSourceEl = document.getElementById('verse-surah');
+        const nextVerseBtn = document.getElementById('next-verse-btn');
+
+        nextVerseBtn.addEventListener('click', () => {
+            const randomIndex = Math.floor(Math.random() * versesList.length);
+            const randomVerse = versesList[randomIndex];
+            verseTextEl.textContent = randomVerse.text;
+            verseSourceEl.textContent = randomVerse.source;
+        });
+
+        // 3. جلب مواقيت الصلاة الحقيقية أونلاين
+        function getLivePrayerTimes() {
+            const city = "Cairo";
+            const country = "Egypt";
+            const method = 5; 
+            const apiUrl = https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=${method};
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.code === 200) {
+                        const timings = data.data.timings;
+                        const dateInfo = data.data.date;
+
+                        document.getElementById('fajr').textContent = timings.Fajr;
+                        document.getElementById('sunrise').textContent = timings.Sunrise;
+                        document.getElementById('dhuhr').textContent = timings.Dhuhr;
+                        document.getElementById('asr').textContent = timings.Asr;
+                        document.getElementById('maghrib').textContent = timings.Maghrib;
+                        document.getElementById('isha').textContent = timings.Isha;
+
+                        document.getElementById('prayer-date').textContent = 
+                            ${dateInfo.hijri.day} ${dateInfo.hijri.month.ar} ${dateInfo.hijri.year} هـ | ${dateInfo.gregorian.date};
+                    } else {
+                        useFallback();
+                    }
+                })
+                .catch(error => {
+                    console.log("تعذر جلب الأوقات الحية، تم الانتقال للوضع الاحتياطي.");
+                    useFallback();
+                });
+        }
+
+        // دالة الأوقات الاحتياطية في حال تعذر الاتصال بالنت
+        function useFallback() {
+            document.getElementById('fajr').textContent = "04:15";
+            document.getElementById('sunrise').textContent = "05:55";
+            document.getElementById('dhuhr').textContent = "12:00";
+            document.getElementById('asr').textContent = "03:30";
+            document.getElementById('maghrib').textContent = "07:00";
+            document.getElementById('isha').textContent = "08:30";
+            document.getElementById('prayer-date').textContent = "مواقيت القاهرة المحلية (وضع الاحتياط)";
+        }
+        
+        getLivePrayerTimes();
+    </script>
 </body>
 </html>
+                localStorage.setItem('myTasbeehCount', count);
+            }
+        });
