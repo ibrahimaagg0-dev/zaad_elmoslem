@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -13,7 +13,7 @@
         .bismillah { text-align: center; font-size: 1.8rem; color: #2d6a4f; margin-bottom: 25px; font-weight: bold; }
         .quran-text { font-size: 1.6rem; line-height: 2.5; text-align: justify; color: #1b4332; word-spacing: 2px; }
         .ayah-num { color: #2d6a4f; font-weight: bold; font-size: 1.2rem; margin: 0 5px; display: inline-block; }
-        .loading-text { text-align: center; color: #666; font-style: italic; display: none; }
+        .loading-text { text-align: center; color: #666; font-style: italic; display: none; margin-top: 20px; font-size: 1.2rem; }
     </style>
 </head>
 <body>
@@ -39,33 +39,26 @@
             <p id="surah-text-content" class="quran-text"></p>
         </div>
 
-        <div id="loading" class="loading-text">جاري تحميل السورة...</div>
+        <div id="loading" class="loading-text">جاري تحميل آيات السورة... 📖</div>
     </div>
 
     <script>
+        // مصفوفة أسماء الـ 114 سورة مدمجة لتعمل فوراً وبدون إنترنت
+        const surahNames = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
+
         const surahSelector = document.getElementById('surah-selector');
         const quranView = document.getElementById('quran-view');
         const surahTextContent = document.getElementById('surah-text-content');
         const bismillahText = document.getElementById('bismillah-text');
         const loading = document.getElementById('loading');
 
-        // 1. جلب قائمة السور كلها عند فتح الصفحة
-        function initQuran() {
-            fetch('https://api.alquran.cloud/v1/surah')
-                .then(res => res.json())
-                .then(data => {
-                    if(data.code === 200) {
-                        data.data.forEach(surah => {
-                            let option = document.createElement('option');
-                            option.value = surah.number;
-                            option.textContent = ${surah.number}. ${surah.name} (${surah.englishNameTranslation});
-                            surahSelector.appendChild(option);
-                        });
-                    }
-                }).catch(err => console.log("خطأ في جلب قائمة السور"));
-        }
-
-        // 2. جلب نصوص السورة المحددة واياتها
+        // توليد القائمة فوراً من الذاكرة الداخلية للموقع
+        surahNames.forEach((name, index) => {
+            let option = document.createElement('option');
+            option.value = index + 1;
+            option.textContent = ${index + 1}. سورة ${name};
+            surahSelector.appendChild(option);
+        });// جلب الآيات عند الضغط على السورة
         function loadSurah(surahNumber) {
             if(!surahNumber) {
                 quranView.style.display = 'none';
@@ -82,7 +75,8 @@
                     if(data.code === 200) {
                         quranView.style.display = 'block';
                         let verses = data.data.verses;
-                        let fullText = "";// إخفاء البسملة التلقائية لو كانت سورة التوبة أو الفاتحة لأنها مدمجة
+                        let fullText = "";
+
                         if(surahNumber == 1 || surahNumber == 9) {
                             bismillahText.style.display = 'none';
                         } else {
@@ -91,7 +85,6 @@
 
                         verses.forEach((ayah, index) => {
                             let text = ayah.text;
-                            // إزالة البسملة المكررة من أول آية في السورة (باستثناء الفاتحة)
                             if(surahNumber != 1 && index === 0 && text.startsWith("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ")) {
                                 text = text.replace("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "");
                             }
@@ -102,12 +95,9 @@
                     }
                 }).catch(err => {
                     loading.style.display = 'none';
-                    alert("تعذر تحميل السورة، تأكد من اتصالك بالإنترنت.");
+                    alert("تعذر تحميل السورة، تأكد من اتصالك بالشبكة.");
                 });
         }
-
-        // تشغيل القائمة فوراً
-        initQuran();
     </script>
 </body>
 </html>
