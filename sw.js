@@ -1,4 +1,4 @@
-const cacheName = 'zaad-v4';
+const cacheName = 'zaad-v5'; // تغيير الرقم هنا هيجبر المتصفح يمسح القديم فوراً
 const assets = [
   './',
   './index.html',
@@ -10,7 +10,6 @@ const assets = [
   './quran.html'
 ];
 
-// حدث التثبيت وتخزين الملفات أوفلاين
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(cacheName).then(cache => {
@@ -19,7 +18,6 @@ self.addEventListener('install', e => {
   );
 });
 
-// حدث جلب البيانات وتشغيل الموقع بدون نت بذكاء
 self.addEventListener('fetch', e => {
   e.respondWith(
     caches.match(e.request).then(res => {
