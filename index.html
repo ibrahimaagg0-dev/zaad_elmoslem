@@ -118,7 +118,7 @@
     <div id="toast" class="toast-notification">تم نسخ الآية بنجاح! ❤️</div>
 
     <script>
-        // ==================== [ 1. برمجة السبحة والذاكرة والأنميشن ] ====================
+        // 1. برمجة السبحة والذاكرة والأنميشن
         var count = 0;
         try {
             if (localStorage.getItem('myTasbeehCount')) {
@@ -155,7 +155,7 @@
             });
         }
 
-        // ==================== [ 2. برمجة آية وتدبر وميزة النسخ ] ====================
+        // 2. برمجة آية وتدبر وميزة النسخ
         var versesList = [
             { text: "«إِنَّ مَعَ الْعُسْرِ يُسْرًا»", source: "[سورة الشرح: 6]" },
             { text: "«وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ»", source: "[سورة الطلاق: 3]" },
@@ -178,9 +178,10 @@
                 if (verseTextEl) verseTextEl.textContent = randomVerse.text;
                 if (verseSourceEl) verseSourceEl.textContent = randomVerse.source;
             });
-        }if (copyVerseBtn) {
-            copyVerseBtn.addEventListener('click', function() {
-                var textToCopy = verseTextEl.textContent + " " + verseSourceEl.textContent + " - تم النسخ من تطبيق زاد المسلم";
+        }
+
+        if (copyVerseBtn) {
+            copyVerseBtn.addEventListener('click', function() {var textToCopy = verseTextEl.textContent + " " + verseSourceEl.textContent + " - تم النسخ من تطبيق زاد المسلم";
                 navigator.clipboard.writeText(textToCopy).then(function() {
                     if (toast) {
                         toast.style.display = 'block';
@@ -192,7 +193,7 @@
             });
         }
 
-        // ==================== [ 3. جلب مواقيت الصلاة أونلاين والوضع الاحتياطي ] ====================
+        // 3. جلب مواقيت الصلاة أونلاين والوضع الاحتياطي
         function useFallback() {
             if(document.getElementById('fajr')) document.getElementById('fajr').textContent = "04:15";
             if(document.getElementById('sunrise')) document.getElementById('sunrise').textContent = "05:55";
@@ -227,7 +228,7 @@
 
         getLivePrayerTimes();
 
-        // ==================== [ 4. تفعيل وتشغيل الـ Service Worker للأوفلاين ] ====================
+        // 4. تشغيل الـ Service Worker للأوفلاين
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
             .then(function() { console.log('Service Worker Registered!'); })
