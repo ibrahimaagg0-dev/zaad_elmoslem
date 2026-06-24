@@ -1,4 +1,4 @@
-const cacheName = 'zaad-v5'; // تغيير الرقم هنا هيجبر المتصفح يمسح القديم فوراً
+const cacheName = 'zaad-v6'; // رفعنا الفيرجن لـ v6 للتأكيد
 const assets = [
   './',
   './index.html',
@@ -10,12 +10,19 @@ const assets = [
   './quran.html'
 ];
 
+// حدث التثبيت - مع طرد الحارس القديم فوراً
 self.addEventListener('install', e => {
+  self.skipWaiting(); // السطر السحري لإجبار التحديث الفوري 🚀
   e.waitUntil(
     caches.open(cacheName).then(cache => {
       return cache.addAll(assets);
     })
   );
+});
+
+// تفعيل السيرفيس وركر الجديد والسيطرة على الصفحة فوراً
+self.addEventListener('activate', e => {
+  e.waitUntil(clients.claim()); 
 });
 
 self.addEventListener('fetch', e => {
