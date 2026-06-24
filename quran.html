@@ -13,7 +13,7 @@
         .bismillah { text-align: center; font-size: 1.8rem; color: #2d6a4f; margin-bottom: 25px; font-weight: bold; }
         .quran-text { font-size: 1.6rem; line-height: 2.5; text-align: justify; color: #1b4332; word-spacing: 2px; }
         .ayah-num { color: #2d6a4f; font-weight: bold; font-size: 1.2rem; margin: 0 5px; display: inline-block; }
-        .loading-text { text-align: center; color: #666; font-style: italic; display: none; margin-top: 20px; font-size: 1.2rem; }
+        .loading-text { text-align: center; color: #666; font-style: italic; display: none; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -26,45 +26,122 @@
     <div class="container">
         <a href="index.html" class="back-link">⬅️ العودة للرئيسية</a>
 
-        <!-- قائمة اختيار السورة -->
         <div class="selector-container">
             <select id="surah-selector" class="surah-select" onchange="loadSurah(this.value)">
                 <option value="">اختر السورة...</option>
+                <option value="1">1. سورة الفاتحة</option>
+                <option value="2">2. سورة البقرة</option>
+                <option value="3">3. سورة آل عمران</option>
+                <option value="18">18. سورة الكهف</option>
+                <option value="36">36. سورة يس</option>
+                <option value="55">55. سورة الرحمن</option>
+                <option value="56">56. سورة الواقعة</option>
+                <option value="67">67. سورة الملك</option>
+                <option value="112">112. سورة الإخلاص</option>
+                <option value="113">113. سورة الفلق</option>
+                <option value="114">114. سورة الناس</option>
             </select>
         </div>
 
-        <!-- مكان عرض الآيات -->
         <div id="quran-view" class="quran-container" style="display: none;">
             <div id="bismillah-text" class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
             <p id="surah-text-content" class="quran-text"></p>
         </div>
 
-        <div id="loading" class="loading-text">جاري تحميل آيات السورة... 📖</div>
+        <div id="loading" class="loading-text">جاري جلب الآيات الكريمة... 📖</div>
     </div>
 
     <script>
-        // مصفوفة أسماء الـ 114 سورة مدمجة لتعمل فوراً وبدون إنترنت
-        const surahNames = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
-
         const surahSelector = document.getElementById('surah-selector');
         const quranView = document.getElementById('quran-view');
         const surahTextContent = document.getElementById('surah-text-content');
         const bismillahText = document.getElementById('bismillah-text');
         const loading = document.getElementById('loading');
 
-        // توليد القائمة فوراً من الذاكرة الداخلية للموقع
-        surahNames.forEach((name, index) => {
-            let option = document.createElement('option');
-            option.value = index + 1;
-            option.textContent = ${index + 1}. سورة ${name};
-            surahSelector.appendChild(option);
-        });// جلب الآيات عند الضغط على السورة
-        function loadSurah(surahNumber) {
-            if(!surahNumber) {
-                quranView.style.display = 'none';
-                return;
-            }
+        // إضافة بقية السور الـ 114 تلقائياً في الخلفية لدعم المصحف كاملاً
+        const allNames =
+            ["البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية"<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>القرآن الكريم - زاد المسلم</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .back-link { display: inline-block; margin: 15px 0; color: #2d6a4f; text-decoration: none; font-weight: bold; font-size: 1.1rem; }
+        .selector-container { margin: 20px 0; text-align: center; }
+        .surah-select { padding: 12px 20px; font-size: 1.1rem; border-radius: 10px; border: 2px solid #2d6a4f; background-color: white; width: 100%; max-width: 300px; font-family: inherit; font-weight: bold; color: #1b4332; cursor: pointer; }
+        .quran-container { background: #fefefe; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 20px; border-top: 5px solid #2d6a4f; }
+        .bismillah { text-align: center; font-size: 1.8rem; color: #2d6a4f; margin-bottom: 25px; font-weight: bold; }
+        .quran-text { font-size: 1.6rem; line-height: 2.5; text-align: justify; color: #1b4332; word-spacing: 2px; }
+        .ayah-num { color: #2d6a4f; font-weight: bold; font-size: 1.2rem; margin: 0 5px; display: inline-block; }
+        .loading-text { text-align: center; color: #666; font-style: italic; display: none; margin-top: 20px; }
+    </style>
+</head>
+<body>
 
+    <header class="main-header">
+        <h1>القرآن الكريم</h1>
+        <p>كِتَابٌ أَنزَلْنَاهُ إِلَيْكَ مُبَارَكٌ لِّيَدَّبَّرُوا آيَاتِهِ</p>
+    </header>
+
+    <div class="container">
+        <a href="index.html" class="back-link">⬅️ العودة للرئيسية</a>
+
+        <div class="selector-container">
+            <select id="surah-selector" class="surah-select" onchange="loadSurah(this.value)">
+                <option value="">اختر السورة...</option>
+                <option value="1">1. سورة الفاتحة</option>
+                <option value="2">2. سورة البقرة</option>
+                <option value="3">3. سورة آل عمران</option>
+                <option value="18">18. سورة الكهف</option>
+                <option value="36">36. سورة يس</option>
+                <option value="55">55. سورة الرحمن</option>
+                <option value="56">56. سورة الواقعة</option>
+                <option value="67">67. سورة الملك</option>
+                <option value="112">112. سورة الإخلاص</option>
+                <option value="113">113. سورة الفلق</option>
+                <option value="114">114. سورة الناس</option>
+            </select>
+        </div>
+
+        <div id="quran-view" class="quran-container" style="display: none;">
+            <div id="bismillah-text" class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+            <p id="surah-text-content" class="quran-text"></p>
+        </div>
+
+        <div id="loading" class="loading-text">جاري جلب الآيات الكريمة... 📖</div>
+    </div>
+
+    <script>
+        const surahSelector = document.getElementById('surah-selector');
+        const quranView = document.getElementById('quran-view');
+        const surahTextContent = document.getElementById('surah-text-content');
+        const bismillahText = document.getElementById('bismillah-text');
+        const loading = document.getElementById('loading');
+
+        // إضافة بقية السور الـ 114 تلقائياً في الخلفية لدعم المصحف كاملاً
+        const allNames = ["البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية""الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد"];
+        
+        // لو القائمة لسه مفيهاش السور كاملة بنفرشهم
+        if(surahSelector.options.length <= 12) {
+            fetch('https://api.alquran.cloud/v1/surah')
+                .then(res => res.json())
+                .then(data => {
+                    if(data.code === 200) {
+                        surahSelector.innerHTML = '<option value="">اختر السورة...</option>';
+                        data.data.forEach(surah => {
+                            let option = document.createElement('option');
+                            option.value = surah.number;
+                            option.textContent = ${surah.number}. سورة ${surah.name};
+                            surahSelector.appendChild(option);
+                        });
+                    }
+                }).catch(() => {});
+        }
+
+        function loadSurah(surahNumber) {
+            if(!surahNumber) { quranView.style.display = 'none'; return; }
             loading.style.display = 'block';
             quranView.style.display = 'none';
 
@@ -77,11 +154,8 @@
                         let verses = data.data.verses;
                         let fullText = "";
 
-                        if(surahNumber == 1 || surahNumber == 9) {
-                            bismillahText.style.display = 'none';
-                        } else {
-                            bismillahText.style.display = 'block';
-                        }
+                        if(surahNumber == 1 || surahNumber == 9) { bismillahText.style.display = 'none'; } 
+                        else { bismillahText.style.display = 'block'; }
 
                         verses.forEach((ayah, index) => {
                             let text = ayah.text;
@@ -90,13 +164,9 @@
                             }
                             fullText += text +  <span class="ayah-num">﴿${ayah.numberInSurah}﴾</span> ;
                         });
-
                         surahTextContent.innerHTML = fullText;
                     }
-                }).catch(err => {
-                    loading.style.display = 'none';
-                    alert("تعذر تحميل السورة، تأكد من اتصالك بالشبكة.");
-                });
+                }).catch(() => { loading.style.display = 'none'; alert("تأكد من اتصالك بالإنترنت لتحميل الآيات."); });
         }
     </script>
 </body>
