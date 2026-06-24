@@ -30,7 +30,7 @@
             background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
             color: white;
             text-align: center;
-            padding: 30px 20px;
+            padding: 35px 20px;
             border-bottom-left-radius: 30px;
             border-bottom-right-radius: 30px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -39,13 +39,33 @@
         .main-header h1 {
             margin: 0;
             font-size: 2.2rem;
-            letter-spacing: 1px;
         }
 
         .main-header p {
-            margin: 5px 0 0 0;
+            margin: 5px 0 15px 0;
             opacity: 0.9;
             font-size: 1rem;
+        }
+
+        /* الزرار السريع للمصحف الشريف فوق في الهيدر */
+        .top-quran-btn {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .top-quran-btn:hover {
+            background: white;
+            color: var(--primary-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
 
         .container {
@@ -61,12 +81,11 @@
             margin-bottom: 20px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.04);
             border-right: 6px solid var(--accent-color);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.2s ease;
         }
 
         .card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
         }
 
         .card-header-flex {
@@ -97,7 +116,6 @@
             margin: 8px 0 15px 0;
         }
 
-        /* تنسيق الأزرار الاحترافية */
         .btn {
             background-color: var(--accent-color);
             color: white;
@@ -112,19 +130,10 @@
             display: inline-block;
             text-decoration: none;
             box-sizing: border-box;
-            transition: background 0.2s ease;
         }
 
-        .btn:hover {
-            background-color: var(--primary-color);
-        }
+        .btn:hover { background-color: var(--primary-color); }
 
-        .verse-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        /* شبكة مواقيت الصلاة */
         .prayer-times-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -138,39 +147,19 @@
             padding: 10px;
             border-radius: 12px;
             text-align: center;
-        }
+        }.prayer-item span { display: block; font-size: 0.85rem; color: #666; }
+        .prayer-item b { font-size: 1.1rem; color: var(--primary-color); }
 
-        .prayer-item span {
-            display: block;
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 4px;
-        }
-
-        .prayer-item b {
-            font-size: 1.1rem;
-            color: var(--primary-color);
-        }/* أنميشن العداد للسبحة */
         #counter-view {
             font-size: 3.5rem;
             color: var(--accent-color);
             margin: 10px 0;
             display: inline-block;
-            transition: transform 0.1s ease-in-out;
             font-weight: bold;
         }
 
-        .pop-animation {
-            transform: scale(1.2);
-            color: var(--light-accent) !important;
-        }
+        .pop-animation { transform: scale(1.2); color: var(--light-accent) !important; transition: transform 0.1s; }
 
-        .sebha-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        /* إشعار تم النسخ */
         .toast-notification {
             position: fixed;
             bottom: 30px;
@@ -182,21 +171,23 @@
             border-radius: 30px;
             font-size: 0.95rem;
             z-index: 1000;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             display: none;
-            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
+    <!-- رأس الصفحة (الهيدر وفيه ميزة المصحف الشريف فوق خالص) -->
     <header class="main-header">
         <h1>زَادُ المُسْلِم</h1>
         <p>رفيقك اليومي للطاعات والذكر</p>
+        <!-- الزرار منور فوق علطول -->
+        <a href="quran.html" class="top-quran-btn">📖 المصحف الشريف كاملاً</a>
     </header>
 
     <main class="container">
         
+        <!-- 1. كارت آية وتدبر -->
         <div class="card" style="border-right-color: #2d6a4f;">
             <div class="card-header-flex">
                 <div class="card-icon">📖</div>
@@ -206,29 +197,19 @@
                 "إِنَّ مَعَ الْعُسْرِ يُسْرًا"
             </p>
             <p id="verse-surah" style="font-size: 0.85rem; color: #888; text-align: center; margin-bottom: 15px;">[سورة الشرح: 6]</p>
-            
-            <div class="verse-actions">
+            <div style="display: flex; gap: 10px;">
                 <button class="btn" id="next-verse-btn" style="flex: 2;">آية أخرى 🔁</button>
                 <button class="btn" id="copy-verse-btn" style="background-color: var(--light-accent); flex: 1;">نسخ 📋</button>
             </div>
         </div>
 
-        <div class="card" style="border-right-color: #40916c;">
-            <div class="card-header-flex">
-                <div class="card-icon">🕌</div>
-                <h3>المصحف الشريف كاملاً</h3>
-            </div>
-            <p>تصفح واقرأ سور القرآن الكريم كاملة بخط فخم وواضح ومريح للعين مباشرة من السيرفر السحابي.</p>
-            <a href="quran.html" class="btn">افتح المصحف الشريف 📖</a>
-        </div>
-
+        <!-- 2. كارت مواقيت الصلاة -->
         <div class="card" style="border-right-color: #52b788;">
             <div class="card-header-flex">
                 <div class="card-icon">⏰</div>
                 <h3>مواقيت الصلاة</h3>
             </div>
             <p id="prayer-date" style="font-size: 0.9rem; color: var(--accent-color); font-weight: bold; margin: 0;">جاري جلب أوقات الصلاة الحقيقية أونلاين...</p>
-            
             <div class="prayer-times-grid">
                 <div class="prayer-item"><span>الفجر</span> <b id="fajr">-:-</b></div>
                 <div class="prayer-item"><span>الشروق</span> <b id="sunrise">-:-</b></div>
@@ -237,35 +218,34 @@
                 <div class="prayer-item"><span>المغرب</span> <b id="maghrib">-:-</b></div>
                 <div class="prayer-item"><span>العشاء</span> <b id="isha">-:-</b></div>
             </div>
-            <p style="font-size: 0.8rem; color: #888; margin: 8px 0 0 0; text-align: left;">📍 القاهرة، مصر</p>
         </div>
 
+        <!-- 3. كارت أذكار الصباح -->
         <div class="card" style="border-right-color: #74c69d;">
             <div class="card-header-flex">
                 <div class="card-icon">☀️</div>
                 <h3>أذكار الصباح</h3>
             </div>
             <p>ابدأ يومك ببركة وحفظ من الله مع العداد الذكي التفاعلي.</p>
-            <a href="sabah.html" class="btn" style="background-color: var(--accent-color);">اقرأ أذكار الصباح</a>
-        </div><div class="card" style="border-right-color: #95d5b2;">
-            <div class="card-icon">🌙</div>
-            <h3>أذكار المساء</h3>
-            <div class="card-header-flex">
-            </div>
-            <p>حصن نفسك ونم في طمأنينة وسكينة مع قراءة الأذكار المسائية.</p>
-            <a href="masa.html" class="btn" style="background-color: var(--accent-color);">اقرأ أذكار المساء</a>
+            <a href="sabah.html" class="btn">اقرأ أذكار الصباح</a>
         </div>
 
+        <!-- 4. كارت أذكار المساء -->
+        <div class="card" style="border-right-color: #95d5b2;">
+            <div class="card-header-flex">
+                <div class="card-icon">🌙</div>
+                <h3>أذكار المساء</h3>
+            </div>
+            <p>حصن نفسك ونم في طمأنينة وسكينة مع قراءة الأذكار المسائية.</p>
+            <a href="masa.html" class="btn">اقرأ أذكار المساء</a>
+        </div><!-- 5. كارت السبحة الإلكترونية -->
         <div class="card" style="border-right-color: #b7e4c7;">
             <div class="card-header-flex">
                 <div class="card-icon">📿</div>
                 <h3>السبحة الإلكترونية</h3>
             </div>
-            <div style="text-align: center;">
-                <h2 id="counter-view">0</h2>
-            </div>
-            
-            <div class="sebha-actions">
+            <div style="text-align: center;"><h2 id="counter-view">0</h2></div>
+            <div style="display: flex; gap: 10px;">
                 <button class="btn" id="tasbeeh-btn" style="flex: 3; padding: 15px;">اضغط للتسبيح</button>
                 <button class="btn" id="reset-btn" style="background-color: #666; flex: 1;">🔄 تصفير</button>
             </div>
@@ -282,14 +262,12 @@
             if (localStorage.getItem('myTasbeehCount')) {
                 count = parseInt(localStorage.getItem('myTasbeehCount')) || 0;
             }
-        } catch(e) { console.log("الذاكرة محجوبة"); }
-
+        } catch(e) {}
         var counterView = document.getElementById('counter-view');
         if (counterView) counterView.textContent = count;
 
-        var tasbeehBtn = document.getElementById('tasbeeh-btn');
-        if (tasbeehBtn) {
-            tasbeehBtn.addEventListener('click', function() {
+        if (document.getElementById('tasbeeh-btn')) {
+            document.getElementById('tasbeeh-btn').addEventListener('click', function() {
                 count++;
                 if (counterView) {
                     counterView.textContent = count;
@@ -300,9 +278,8 @@
             });
         }
 
-        var resetBtn = document.getElementById('reset-btn');
-        if (resetBtn) {
-            resetBtn.addEventListener('click', function() {
+        if (document.getElementById('reset-btn')) {
+            document.getElementById('reset-btn').addEventListener('click', function() {
                 if (confirm("هل تريد تصفير عداد السبحة؟")) {
                     count = 0;
                     if (counterView) counterView.textContent = count;
@@ -317,75 +294,56 @@
             { text: "«وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ»", source: "[سورة الطلاق: 3]" },
             { text: "«أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ»", source: "[سورة الرعد: 28]" },
             { text: "«وَقُل رَّبِّ زِدْنِي عِلْمًا»", source: "[سورة طه: 114]" },
-            { text: "«إِنَّ اللَّهَ مَعَ الصَّابِرِينَ»", source: "[سورة البقرة: 153]" },
-            { text: "«وَإِذَا سَأَلَكَ عِبَادِي عَنِّي فَإِنِّي قَرِيبٌ»", source: "[سورة البقرة: 186]" }
+            { text: "«إِنَّ اللَّهَ مَعَ الصَّابِرِينَ»", source: "[سورة البقرة: 153]" }
         ];
-
         var verseTextEl = document.getElementById('quran-verse');
         var verseSourceEl = document.getElementById('verse-surah');
-        var nextVerseBtn = document.getElementById('next-verse-btn');
-        var copyVerseBtn = document.getElementById('copy-verse-btn');
-        var toast = document.getElementById('toast');
 
-        if (nextVerseBtn) {
-            nextVerseBtn.addEventListener('click', function() {
+        if (document.getElementById('next-verse-btn')) {
+            document.getElementById('next-verse-btn').addEventListener('click', function() {
                 var randomIndex = Math.floor(Math.random() * versesList.length);
-                var randomVerse = versesList[randomIndex];
-                if (verseTextEl) verseTextEl.textContent = randomVerse.text;
-                if (verseSourceEl) verseSourceEl.textContent = randomVerse.source;
+                if (verseTextEl) verseTextEl.textContent = versesList[randomIndex].text;
+                if (verseSourceEl) verseSourceEl.textContent = versesList[randomIndex].source;
             });
-        }if (copyVerseBtn) {
-            copyVerseBtn.addEventListener('click', function() {
-                var textToCopy = verseTextEl.textContent + " " + verseSourceEl.textContent + " - تم النسخ من تطبيق زاد المسلم";
+        }
+
+        if (document.getElementById('copy-verse-btn')) {
+            document.getElementById('copy-verse-btn').addEventListener('click', function() {
+                var textToCopy = verseTextEl.textContent + " " + verseSourceEl.textContent;
                 navigator.clipboard.writeText(textToCopy).then(function() {
-                    if (toast) {
-                        toast.style.display = 'block';
-                        setTimeout(function() { toast.style.display = 'none'; }, 2000);
-                    }
-                }).catch(function() { alert("تعذر النسخ"); });
+                    var toast = document.getElementById('toast');
+                    if (toast) { toast.style.display = 'block'; setTimeout(function() { toast.style.display = 'none'; }, 2000); }
+                });
             });
-        }
-
-        // --- 3. جلب مواقيت الصلاة أونلاين ودالة الاحتياط ---
+        }// --- 3. جلب مواقيت الصلاة أونلاين ودالة الاحتياط ---
         function useFallback() {
-            if(document.getElementById('fajr')) document.getElementById('fajr').textContent = "04:15";
-            if(document.getElementById('sunrise')) document.getElementById('sunrise').textContent = "05:55";
-            if(document.getElementById('dhuhr')) document.getElementById('dhuhr').textContent = "12:00";
-            if(document.getElementById('asr')) document.getElementById('asr').textContent = "03:30";
-            if(document.getElementById('maghrib')) document.getElementById('maghrib').textContent = "07:00";
-            if(document.getElementById('isha')) document.getElementById('isha').textContent = "08:30";
-            if(document.getElementById('prayer-date')) document.getElementById('prayer-date').textContent = "مواقيت القاهرة (وضع الاحتياط أوفلاين)";
+            document.getElementById('fajr').textContent = "04:15";
+            document.getElementById('sunrise').textContent = "05:55";
+            document.getElementById('dhuhr').textContent = "12:00";
+            document.getElementById('asr').textContent = "03:30";
+            document.getElementById('maghrib').textContent = "07:00";
+            document.getElementById('isha').textContent = "08:30";
+            document.getElementById('prayer-date').textContent = "مواقيت القاهرة (وضع الاحتياط)";
         }
 
-        function getLivePrayerTimes() {
-            var apiUrl = "https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5";
-            fetch(apiUrl)
-                .then(function(res) { return res.json(); })
-                .then(function(data) {
-                    if (data && data.code === 200 && data.data) {
-                        var timings = data.data.timings;
-                        var dateInfo = data.data.date;
-                        if(document.getElementById('fajr')) document.getElementById('fajr').textContent = timings.Fajr;
-                        if(document.getElementById('sunrise')) document.getElementById('sunrise').textContent = timings.Sunrise;
-                        if(document.getElementById('dhuhr')) document.getElementById('dhuhr').textContent = timings.Dhuhr;
-                        if(document.getElementById('asr')) document.getElementById('asr').textContent = timings.Asr;
-                        if(document.getElementById('maghrib')) document.getElementById('maghrib').textContent = timings.Maghrib;
-                        if(document.getElementById('isha')) document.getElementById('isha').textContent = timings.Isha;
-                        if(document.getElementById('prayer-date')) {
-                            document.getElementById('prayer-date').textContent = dateInfo.hijri.day + " " + dateInfo.hijri.month.ar + " " + dateInfo.hijri.year + " هـ | " + dateInfo.gregorian.date;
-                        }
-                    } else { useFallback(); }
-                })
-                .catch(function(err) { useFallback(); });
-        }
+        fetch("https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5")
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.code === 200) {
+                    var t = data.data.timings;
+                    document.getElementById('fajr').textContent = t.Fajr;
+                    document.getElementById('sunrise').textContent = t.Sunrise;
+                    document.getElementById('dhuhr').textContent = t.Dhuhr;
+                    document.getElementById('asr').textContent = t.Asr;
+                    document.getElementById('maghrib').textContent = t.Maghrib;
+                    document.getElementById('isha').textContent = t.Isha;
+                    document.getElementById('prayer-date').textContent = data.data.date.gregorian.date;
+                } else { useFallback(); }
+            }).catch(() => useFallback());
 
-        getLivePrayerTimes();
-
-        // --- 4. تشغيل الـ Service Worker ليدعم فتح التطبيق أوفلاين ---
+        // --- 4. تشغيل الـ Service Worker للأوفلاين ---
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-            .then(function() { console.log('Service Worker OK'); })
-            .catch(function(err) { console.log('Service Worker Error', err); });
+            navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
         }
     </script>
 </body>
