@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>القرآن الكريم - زاد المسلم</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .back-link { display: inline-block; margin: 15px 0; color: #2d6a4f; text-decoration: none; font-weight: bold; font-size: 1.1rem; }
+        .selector-container { margin: 20px 0; text-align: center; }
+        .surah-select { padding: 12px 20px; font-size: 1.1rem; border-radius: 10px; border: 2px solid #2d6a4f; background-color: white; width: 100%; max-width: 300px; font-family: inherit; font-weight: bold; color: #1b4332; cursor: pointer; }
+        .quran-container { background: #fefefe; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 20px; border-top: 5px solid #2d6a4f; }
+        .bismillah { text-align: center; font-size: 1.8rem; color: #2d6a4f; margin-bottom: 25px; font-weight: bold; }
+        .quran-text { font-size: 1.6rem; line-height: 2.5; text-align: justify; color: #1b4332; word-spacing: 2px; }
+        .ayah-num { color: #2d6a4f; font-weight: bold; font-size: 1.2rem; margin: 0 5px; display: inline-block; }
+        .loading-text { text-align: center; color: #666; font-style: italic; display: none; }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <h1>القرآن الكريم</h1>
+        <p>كِتَابٌ أَنزَلْنَاهُ إِلَيْكَ مُبَارَكٌ لِّيَدَّبَّرُوا آيَاتِهِ</p>
+    </header>
+
+    <div class="container">
+        <a href="index.html" class="back-link">⬅️ العودة للرئيسية</a>
+
+        <!-- قائمة اختيار السورة -->
+        <div class="selector-container">
+            <select id="surah-selector" class="surah-select" onchange="loadSurah(this.value)">
+                <option value="">اختر السورة...</option>
+            </select>
+        </div>
+
+        <!-- مكان عرض الآيات -->
+        <div id="quran-view" class="quran-container" style="display: none;">
+            <div id="bismillah-text" class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+            <p id="surah-text-content" class="quran-text"></p>
+        </div>
+
+        <div id="loading" class="loading-text">جاري تحميل السورة...</div>
+    </div>
+
+    <script>
+        const surahSelector = document.getElementById('surah-selector');
+        const quranView = document.getElementById('quran-view');
+        const surahTextContent = document.getElementById('surah-text-content');
+        const bismillahText = document.getElementById('bismillah-text');
+        const loading = document.getElementById('loading');
+
+        // 1. جلب قائمة السور كلها عند فتح الصفحة
+        function initQuran() {
+            fetch('https://api.alquran.cloud/v1/surah')
+                .then(res => res.json())
+                .then(data => {
+                    if(data.code === 200) {
+                        data.data.forEach(surah => {
+                            let option = document.createElement('option');
+                            option.value = surah.number;
+                            option.textContent = ${surah.number}. ${surah.name} (${surah.englishNameTranslation});
+                            surahSelector.appendChild(option);
+                        });
+                    }
+                }).catch(err => console.log("خطأ في جلب قائمة السور"));
+        }
+
+        // 2. جلب نصوص السورة المحددة واياتها
+        function loadSurah(surahNumber) {
+            if(!surahNumber) {
+                quranView.style.display = 'none';
+                return;
+            }
+
+            loading.style.display = 'block';
+            quranView.style.display = 'none';
+
+            fetch(https://api.alquran.cloud/v1/surah/${surahNumber})
+                .then(res => res.json())
+                .then(data => {
+                    loading.style.display = 'none';
+                    if(data.code === 200) {
+                        quranView.style.display = 'block';
+                        let verses = data.data.verses;
+                        let fullText = "";// إخفاء البسملة التلقائية لو كانت سورة التوبة أو الفاتحة لأنها مدمجة
+                        if(surahNumber == 1 || surahNumber == 9) {
+                            bismillahText.style.display = 'none';
+                        } else {
+                            bismillahText.style.display = 'block';
+                        }
+
+                        verses.forEach((ayah, index) => {
+                            let text = ayah.text;
+                            // إزالة البسملة المكررة من أول آية في السورة (باستثناء الفاتحة)
+                            if(surahNumber != 1 && index === 0 && text.startsWith("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ")) {
+                                text = text.replace("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "");
+                            }
+                            fullText += text +  <span class="ayah-num">﴿${ayah.numberInSurah}﴾</span> ;
+                        });
+
+                        surahTextContent.innerHTML = fullText;
+                    }
+                }).catch(err => {
+                    loading.style.display = 'none';
+                    alert("تعذر تحميل السورة، تأكد من اتصالك بالإنترنت.");
+                });
+        }
+
+        // تشغيل القائمة فوراً
+        initQuran();
+    </script>
+</body>
+</html>
