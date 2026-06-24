@@ -9,37 +9,182 @@
     <link rel="icon" type="image/png" href="icon.png">
     
     <style>
-        /* حركة العداد لما يكبّر ويصغّر مع التسبيح */
-        .pop-animation {
-            transform: scale(1.2);
-            color: #40916c !important;
-            transition: all 0.1s ease-in-out;
+        :root {
+            --primary-color: #1b4332;
+            --accent-color: #2d6a4f;
+            --light-accent: #40916c;
+            --bg-color: #f4f7f5;
+            --card-bg: #ffffff;
+            --text-color: #2d312e;
         }
-        #counter-view {
-            transition: all 0.1s ease-in-out;
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .main-header h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+        }
+
+        .main-header p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+            border-right: 6px solid var(--accent-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+        }
+
+        .card-header-flex {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .card-icon {
+            font-size: 1.6rem;
+            background: #e8f5e9;
+            padding: 8px;
+            border-radius: 12px;
+            display: inline-flex;
+        }
+
+        .card h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: var(--primary-color);
+        }
+
+        .card p {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 8px 0 15px 0;
+        }
+
+        /* تنسيق الأزرار الاحترافية */
+        .btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            width: 100%;
+            text-align: center;
             display: inline-block;
+            text-decoration: none;
+            box-sizing: border-box;
+            transition: background 0.2s ease;
         }
-        /* تنسيق أزرار كارت الآية */
+
+        .btn:hover {
+            background-color: var(--primary-color);
+        }
+
         .verse-actions {
             display: flex;
             gap: 10px;
-            justify-content: center;
+        }
+
+        /* شبكة مواقيت الصلاة */
+        .prayer-times-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
             margin-top: 15px;
         }
-        /* ستايل إشعار تم النسخ */
+
+        .prayer-item {
+            background: #f8faf9;
+            border: 1px solid #e0e6e2;
+            padding: 10px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .prayer-item span {
+            display: block;
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .prayer-item b {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }/* أنميشن العداد للسبحة */
+        #counter-view {
+            font-size: 3.5rem;
+            color: var(--accent-color);
+            margin: 10px 0;
+            display: inline-block;
+            transition: transform 0.1s ease-in-out;
+            font-weight: bold;
+        }
+
+        .pop-animation {
+            transform: scale(1.2);
+            color: var(--light-accent) !important;
+        }
+
+        .sebha-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* إشعار تم النسخ */
         .toast-notification {
             position: fixed;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #1b4332;
+            background-color: var(--primary-color);
             color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 0.9rem;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 0.95rem;
             z-index: 1000;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             display: none;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -52,31 +197,37 @@
 
     <main class="container">
         
-        <div class="card" style="border-right: 5px solid #2d6a4f;">
-            <div class="card-icon">📖</div>
-            <h3>آية وتدبر</h3>
-            <p id="quran-verse" style="font-size: 1.2rem; font-weight: bold; color: #1b4332; line-height: 1.8; margin: 15px 0;">
+        <div class="card" style="border-right-color: #2d6a4f;">
+            <div class="card-header-flex">
+                <div class="card-icon">📖</div>
+                <h3>آية وتدبر</h3>
+            </div>
+            <p id="quran-verse" style="font-size: 1.2rem; font-weight: bold; color: var(--primary-color); text-align: center; margin: 15px 0;">
                 "إِنَّ مَعَ الْعُسْرِ يُسْرًا"
             </p>
-            <p id="verse-surah" style="font-size: 0.85rem; color: #888; margin-bottom: 15px;">[سورة الشرح: 6]</p>
+            <p id="verse-surah" style="font-size: 0.85rem; color: #888; text-align: center; margin-bottom: 15px;">[سورة الشرح: 6]</p>
             
             <div class="verse-actions">
-                <button class="btn" id="next-verse-btn" style="width: auto; padding: 8px 15px;">آية أخرى 🔁</button>
-                <button class="btn" id="copy-verse-btn" style="background-color: #40916c; width: auto; padding: 8px 15px;">نسخ الآية 📋</button>
+                <button class="btn" id="next-verse-btn" style="flex: 2;">آية أخرى 🔁</button>
+                <button class="btn" id="copy-verse-btn" style="background-color: var(--light-accent); flex: 1;">نسخ 📋</button>
             </div>
         </div>
 
-        <div class="card" style="border-right: 5px solid #40916c;">
-            <div class="card-icon">🕌</div>
-            <h3>المصحف الشريف</h3>
-            <p>اقرأ وتدبر سور القرآن الكريم كاملة بدون أخطاء وبخط واضح</p>
-            <a href="quran.html" class="btn" style="text-decoration: none; display: block; background-color: #2d6a4f;">افتح المصحف الشريف</a>
+        <div class="card" style="border-right-color: #40916c;">
+            <div class="card-header-flex">
+                <div class="card-icon">🕌</div>
+                <h3>المصحف الشريف كاملاً</h3>
+            </div>
+            <p>تصفح واقرأ سور القرآن الكريم كاملة بخط فخم وواضح ومريح للعين مباشرة من السيرفر السحابي.</p>
+            <a href="quran.html" class="btn">افتح المصحف الشريف 📖</a>
         </div>
 
-        <div class="card">
-            <div class="card-icon">⏰</div>
-            <h3>مواقيت الصلاة اليوم</h3>
-            <p id="prayer-date" style="font-size: 0.9rem; color: #2d6a4f; font-weight: bold;">جاري تحميل المواقيت الحقيقية أونلاين...</p>
+        <div class="card" style="border-right-color: #52b788;">
+            <div class="card-header-flex">
+                <div class="card-icon">⏰</div>
+                <h3>مواقيت الصلاة</h3>
+            </div>
+            <p id="prayer-date" style="font-size: 0.9rem; color: var(--accent-color); font-weight: bold; margin: 0;">جاري جلب أوقات الصلاة الحقيقية أونلاين...</p>
             
             <div class="prayer-times-grid">
                 <div class="prayer-item"><span>الفجر</span> <b id="fajr">-:-</b></div>
@@ -86,30 +237,37 @@
                 <div class="prayer-item"><span>المغرب</span> <b id="maghrib">-:-</b></div>
                 <div class="prayer-item"><span>العشاء</span> <b id="isha">-:-</b></div>
             </div>
-            <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">📍 القاهرة، مصر</p>
+            <p style="font-size: 0.8rem; color: #888; margin: 8px 0 0 0; text-align: left;">📍 القاهرة، مصر</p>
         </div>
 
-        <div class="card">
-            <div class="card-icon">☀️</div>
-            <h3>أذكار الصباح</h3>
-            <p>ابدأ يومك ببركة وحفظ من الله</p>
-            <a href="sabah.html" class="btn" style="text-decoration: none; display: block;">اقرأ الآن</a>
-        </div><div class="card">
+        <div class="card" style="border-right-color: #74c69d;">
+            <div class="card-header-flex">
+                <div class="card-icon">☀️</div>
+                <h3>أذكار الصباح</h3>
+            </div>
+            <p>ابدأ يومك ببركة وحفظ من الله مع العداد الذكي التفاعلي.</p>
+            <a href="sabah.html" class="btn" style="background-color: var(--accent-color);">اقرأ أذكار الصباح</a>
+        </div><div class="card" style="border-right-color: #95d5b2;">
             <div class="card-icon">🌙</div>
             <h3>أذكار المساء</h3>
-            <p>حصن نفسك ونم في طمأنينة</p>
-            <a href="masa.html" class="btn" style="text-decoration: none; display: block;">اقرأ الآن</a>
+            <div class="card-header-flex">
+            </div>
+            <p>حصن نفسك ونم في طمأنينة وسكينة مع قراءة الأذكار المسائية.</p>
+            <a href="masa.html" class="btn" style="background-color: var(--accent-color);">اقرأ أذكار المساء</a>
         </div>
 
-        <div class="card">
-            <div class="card-icon">📿</div>
-            <h3>السبحة الإلكترونية</h3>
-            <h2 id="counter-view" style="font-size: 3rem; color: #2d6a4f; margin: 10px 0;">0</h2> 
-            <p style="margin-bottom: 15px;">اضغط على الزرار للتسبيح</p>
+        <div class="card" style="border-right-color: #b7e4c7;">
+            <div class="card-header-flex">
+                <div class="card-icon">📿</div>
+                <h3>السبحة الإلكترونية</h3>
+            </div>
+            <div style="text-align: center;">
+                <h2 id="counter-view">0</h2>
+            </div>
             
-            <div style="display: flex; gap: 10px;">
-                <button class="btn" id="tasbeeh-btn">تسبيح</button>
-                <button class="btn" id="reset-btn" style="background-color: #666; width: auto;">🔄</button>
+            <div class="sebha-actions">
+                <button class="btn" id="tasbeeh-btn" style="flex: 3; padding: 15px;">اضغط للتسبيح</button>
+                <button class="btn" id="reset-btn" style="background-color: #666; flex: 1;">🔄 تصفير</button>
             </div>
         </div>
 
@@ -118,13 +276,13 @@
     <div id="toast" class="toast-notification">تم نسخ الآية بنجاح! ❤️</div>
 
     <script>
-        // 1. برمجة السبحة والذاكرة والأنميشن
+        // --- 1. برمجة السبحة والذاكرة المحمية ---
         var count = 0;
         try {
             if (localStorage.getItem('myTasbeehCount')) {
                 count = parseInt(localStorage.getItem('myTasbeehCount')) || 0;
             }
-        } catch(e) {}
+        } catch(e) { console.log("الذاكرة محجوبة"); }
 
         var counterView = document.getElementById('counter-view');
         if (counterView) counterView.textContent = count;
@@ -136,9 +294,7 @@
                 if (counterView) {
                     counterView.textContent = count;
                     counterView.classList.add('pop-animation');
-                    setTimeout(function() {
-                        counterView.classList.remove('pop-animation');
-                    }, 100);
+                    setTimeout(function() { counterView.classList.remove('pop-animation'); }, 100);
                 }
                 try { localStorage.setItem('myTasbeehCount', count); } catch(e) {}
             });
@@ -155,10 +311,10 @@
             });
         }
 
-        // 2. برمجة آية وتدبر وميزة النسخ
+        // --- 2. برمجة آيات وتدبر والنسخ السريع ---
         var versesList = [
             { text: "«إِنَّ مَعَ الْعُسْرِ يُسْرًا»", source: "[سورة الشرح: 6]" },
-            { text: "«وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُو حَسْبُهُ»", source: "[سورة الطلاق: 3]" },
+            { text: "«وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ»", source: "[سورة الطلاق: 3]" },
             { text: "«أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ»", source: "[سورة الرعد: 28]" },
             { text: "«وَقُل رَّبِّ زِدْنِي عِلْمًا»", source: "[سورة طه: 114]" },
             { text: "«إِنَّ اللَّهَ مَعَ الصَّابِرِينَ»", source: "[سورة البقرة: 153]" },
@@ -178,22 +334,19 @@
                 if (verseTextEl) verseTextEl.textContent = randomVerse.text;
                 if (verseSourceEl) verseSourceEl.textContent = randomVerse.source;
             });
-        }
-
-        if (copyVerseBtn) {
-            copyVerseBtn.addEventListener('click', function() {var textToCopy = verseTextEl.textContent + " " + verseSourceEl.textContent + " - تم النسخ من تطبيق زاد المسلم";
+        }if (copyVerseBtn) {
+            copyVerseBtn.addEventListener('click', function() {
+                var textToCopy = verseTextEl.textContent + " " + verseSourceEl.textContent + " - تم النسخ من تطبيق زاد المسلم";
                 navigator.clipboard.writeText(textToCopy).then(function() {
                     if (toast) {
                         toast.style.display = 'block';
                         setTimeout(function() { toast.style.display = 'none'; }, 2000);
                     }
-                }).catch(function() {
-                    alert("عذراً، لم نتمكن من نسخ النص.");
-                });
+                }).catch(function() { alert("تعذر النسخ"); });
             });
         }
 
-        // 3. جلب مواقيت الصلاة أونلاين والوضع الاحتياطي
+        // --- 3. جلب مواقيت الصلاة أونلاين ودالة الاحتياط ---
         function useFallback() {
             if(document.getElementById('fajr')) document.getElementById('fajr').textContent = "04:15";
             if(document.getElementById('sunrise')) document.getElementById('sunrise').textContent = "05:55";
@@ -201,7 +354,7 @@
             if(document.getElementById('asr')) document.getElementById('asr').textContent = "03:30";
             if(document.getElementById('maghrib')) document.getElementById('maghrib').textContent = "07:00";
             if(document.getElementById('isha')) document.getElementById('isha').textContent = "08:30";
-            if(document.getElementById('prayer-date')) document.getElementById('prayer-date').textContent = "مواقيت القاهرة (وضع الاحتياط)";
+            if(document.getElementById('prayer-date')) document.getElementById('prayer-date').textContent = "مواقيت القاهرة (وضع الاحتياط أوفلاين)";
         }
 
         function getLivePrayerTimes() {
@@ -228,11 +381,11 @@
 
         getLivePrayerTimes();
 
-        // 4. تشغيل الـ Service Worker للأوفلاين
+        // --- 4. تشغيل الـ Service Worker ليدعم فتح التطبيق أوفلاين ---
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
-            .then(function() { console.log('Service Worker Registered!'); })
-            .catch(function(err) { console.log('Service Worker Failed', err); });
+            .then(function() { console.log('Service Worker OK'); })
+            .catch(function(err) { console.log('Service Worker Error', err); });
         }
     </script>
 </body>
