@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>القرآن الكريم - زاد المسلم</title>
+    <title>المصحف الشريف - زاد المسلم</title>
     <link rel="stylesheet" href="style.css">
     <style>
         .back-link { display: inline-block; margin: 15px 0; color: #2d6a4f; text-decoration: none; font-weight: bold; font-size: 1.1rem; }
@@ -20,13 +20,14 @@
 <body>
 
     <header class="main-header">
-        <h1>القرآن الكريم</h1>
-        <p>كِتَابٌ أَنزَلْنَاهُ إِلَيْكَ مُبَارَكٌ لِّيَدَّبَّرُوا آيَاتِهِ</p>
+        <h1>المصحف الشريف</h1>
+        <p>قراءة وتدبر سور القرآن الكريم كاملة</p>
     </header>
 
     <div class="container">
         <a href="index.html" class="back-link">⬅️ العودة للرئيسية</a>
 
+        <!-- قائمة اختيار السورة -->
         <div class="selector-container">
             <select id="surah-selector" class="surah-select" onchange="loadSurah(this.value)">
                 <option value="">اختر السورة...</option>
@@ -35,6 +36,7 @@
 
         <div id="status-box" class="status-message"></div>
 
+        <!-- مكان عرض الآيات -->
         <div id="quran-view" class="quran-container" style="display: none;">
             <div id="bismillah-text" class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
             <p id="surah-text-content" class="quran-text"></p>
@@ -42,44 +44,39 @@
     </div>
 
     <script>
-        // أسماء الـ 114 سورة كاملة محفورة داخل الكود لحمايتها من الاختفاء
-        const surahs = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
-
-        const surahSelector = document.getElementById('surah-selector');
+        // مصفوفة الـ 114 سورة كاملة محفورة جوه الكود عشان يستحيل تختفي
+        const names = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
+        
+        const selector = document.getElementById('surah-selector');
         const quranView = document.getElementById('quran-view');
         const surahTextContent = document.getElementById('surah-text-content');
         const bismillahText = document.getElementById('bismillah-text');
-        const statusBox = document.getElementById('status-box');// بناء قائمة السور فوراً من الذاكرة الداخلية
-        surahs.forEach((name, index) => {
-            let option = document.createElement('option');
-            option.value = index + 1;
-            option.textContent = ${index + 1}. سورة ${name};
-            surahSelector.appendChild(option);
+        const statusBox = document.getElementById('status-box');// توليد القائمة فوراً وبدون انتظار الإنترنت
+        names.forEach((name, i) => {
+            let opt = document.createElement('option');
+            opt.value = i + 1;
+            opt.textContent = ${i + 1}. سورة ${name};
+            selector.appendChild(opt);
         });
 
         function loadSurah(num) {
             if(!num) { quranView.style.display = 'none'; statusBox.style.display = 'none'; return; }
-            
             quranView.style.display = 'none';
+            
             statusBox.style.display = 'block';
             statusBox.classList.remove('error-message');
-            statusBox.textContent = "جاري جلب نص السورة والآيات الكريمة... 📖";
+            statusBox.textContent = "جاري تحميل آيات السورة العظيمة... 📖";
 
-            // جلب نصوص الآيات من السيرفر السحابي
             fetch(https://api.alquran.cloud/v1/surah/${num})
                 .then(res => res.json())
                 .then(data => {
                     statusBox.style.display = 'none';
                     if(data.code === 200) {
                         quranView.style.display = 'block';
-                        
-                        // إخفاء البسملة التلقائية في الفاتحة والتوبة
                         bismillahText.style.display = (num == 1 || num == 9) ? 'none' : 'block';
-                        
                         let txt = "";
                         data.data.verses.forEach((ayah, i) => {
                             let t = ayah.text;
-                            // تنظيف أول آية من البسملة المكررة
                             if(num != 1 && i === 0 && t.startsWith("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ")) {
                                 t = t.replace("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "");
                             }
@@ -91,7 +88,7 @@
                 .catch(() => {
                     statusBox.style.display = 'block';
                     statusBox.classList.add('error-message');
-                    statusBox.textContent = "برجاء التأكد من اتصالك بالإنترنت جاري محاولة جلب السورة.";
+                    statusBox.textContent = "تأكد من تشغيل الإنترنت لجلب الآيات.";
                 });
         }
     </script>
