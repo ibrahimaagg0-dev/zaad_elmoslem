@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -21,7 +21,7 @@
             background: linear-gradient(135deg, var(--primary), var(--accent));
             color: white;
             text-align: center;
-            padding: 30px 20px;
+            padding: 25px 20px;
             border-bottom-left-radius: 25px;
             border-bottom-right-radius: 25px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -30,9 +30,10 @@
         .header p { margin: 5px 0 0 0; opacity: 0.9; font-size: 0.95rem; }
         
         .container {
-            padding: 20px;
-            max-width: 600px;
+            padding: 15px;
+            max-width: 800px;
             margin: 0 auto;
+            text-align: center;
         }
         .btn-back {
             display: inline-block;
@@ -41,147 +42,68 @@
             text-decoration: none;
             font-weight: bold;
             font-size: 1rem;
+            float: right;
         }
-        select {
-            width: 100%;
-            padding: 15px;
-            font-size: 1.1rem;
-            border: 2px solid var(--accent);
+        .btn-open-pdf {
+            background-color: var(--accent);
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
             border-radius: 12px;
             font-weight: bold;
-            color: var(--primary);
-            background: white;
-            margin-bottom: 20px;
-            cursor: pointer;
+            font-size: 1.2rem;
+            margin: 20px auto;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: background 0.2s;
         }
-        .quran-box {
-            background: white;
-            padding: 25px;
+        .btn-open-pdf:hover {
+            background-color: var(--primary);
+        }
+        .pdf-viewer-container {
+            width: 100%;
+            height: 75vh;
             border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
-            border-top: 5px solid var(--accent);
-            min-height: 120px;
-            line-height: 2.6;
-            font-size: 1.55rem;
-            text-align: justify;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid var(--accent);
+            margin-top: 10px;
+            background: #fff;
         }
-        .ayah-num {
-            color: var(--accent);
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin: 0 4px;
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
-        .status {
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
+        .note {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 15px;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h2>المصحف الشريف</h2>
-        <p>زاد المسلم - قراءة وتدبر السور</p>
+        <h2>المصحف الشريف كَامِلاً</h2>
+        <p>زاد المسلم - تصفح وقراءة القرآن الكريم بخط واضح</p>
     </div>
 
     <div class="container">
         <a href="index.html" class="btn-back">⬅️ العودة للرئيسية</a>
-        
-        <!-- القائمة بداخلها الـ 114 سورة كاملة وثابتة -->
-        <select id="surah-select">
-            <option value="">اختر السورة...</option>
-        </select>
-        
-        <!-- صندوق حالة التحميل -->
-        <div id="status" class="status"></div>
-        
-        <!-- صندوق عرض النصوص الكريمة -->
-        <div id="quran-output" class="quran-box">اضغط على القائمة واختبر سورة الفاتحة أو الإخلاص أولاً... 👇</div>
+        <div style="clear: both;"></div>
+
+        <a href="quran.pdf" target="_blank" class="btn-open-pdf">📖 اضغط هنا لفتح المصحف في شاشة كاملة</a>
+
+        <div class="pdf-viewer-container">
+            <iframe src="quran.pdf"></iframe>
+        </div>
+
+        <p class="note">
+            💡 <b>تنويه مريح:</b> تصفح المصحف مباشرة من المربع بالأعلى، أو اضغط على الزر الأخضر الكبير لفتح المصحف في صفحة مستقلة كاملة لتكبير الحروف والقراءة براحتك وبأعلى جودة.
+        </p>
     </div>
 
-    <script>
-        // مصفوفة أسماء الـ 114 سورة كاملة محفورة في الكود لحمايتها
-        const surahNames = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون"
-                            "الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
-        
-        // سور كاملة مدمجة أوفلاين للاختبار المباشر الفوري بدون إنترنت
-        const localSurahs = {
-            1: ["بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ", "الرَّحْمَٰنِ الرَّحِيمِ", "مَالِكِ يَوْمِ الدِّينِ", "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ", "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ", "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ"],
-            112: ["قُلْ هُوَ اللَّهُ أَحَدٌ", "اللَّهُ الصَّمَدُ", "لَمْ يَلِدْ وَلَمْ يُولَدْ", "وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ"]
-        };
-
-        // تشغيل الأكواد بأمان فور تحميل الصفحة بالكامل
-        document.addEventListener('DOMContentLoaded', function() {
-            const select = document.getElementById('surah-select');
-            const output = document.getElementById('quran-output');
-            const status = document.getElementById('status');
-
-            // فرش الـ 114 سورة بداخل القائمة فوراً
-            surahNames.forEach((name, index) => {
-                let opt = document.createElement('option');
-                opt.value = index + 1;
-                if(index + 1 === 1 || index + 1 === 112) {
-                    opt.textContent = ${index + 1}. سورة ${name} (تشغيل فوري أوفلاين ⚡);
-                } else {
-                    opt.textContent = ${index + 1}. سورة ${name};
-                }
-                select.appendChild(opt);
-            });
-
-            // مراقبة القائمة برمجياً لالتقاط ضغطة المستخدم بأمان (بدون أخطاء الموبايل)
-            select.addEventListener('change', function() {
-                const num = this.value;
-                if(!num) {
-                    output.innerHTML = "اضغط على القائمة واختبر سورة الفاتحة أو الإخلاص أولاً... 👇";
-                    status.innerHTML = "";
-                    return;
-                }
-
-                // أولاً: فحص لو السورة مدمجة أوفلاين (الفاتحة أو الإخلاص) يتم عرضها في فيمتو ثانية
-                if(localSurahs[num]) {
-                    status.innerHTML = "⚡ تم العرض الفوري من الذاكرة الداخلية";
-                    status.style.color = "#2d6a4f";
-                    let htmlText = "";
-                    localSurahs[num].forEach((verse, i) => {
-                        htmlText += verse +  <span class="ayah-num">﴿${i + 1}﴾</span> ;
-                    });
-                    output.innerHTML = htmlText;
-                    return;
-                }
-
-                // ثانياً: السور الأخرى أونلاين مع إظهار رسالة تفصيلية لو حدث أي عطل
-                status.innerHTML = "⏳ جاري جلب الآيات الكريمة أونلاين...";
-                status.style.color = "#666";
-                output.innerHTML = "جاري تحميل نص السورة...";
-
-                fetch('https://api.alquran.cloud/v1/surah/' + num)
-                    .then(res => {
-                        if (!res.ok) throw new Error('السيرفر لم يستجب بالشكل الصحيح');
-                        return res.json();
-                    })
-                    .then(data => {
-                        status.innerHTML = "✅ تم تحميل السورة بنجاح";
-                        status.style.color = "#2d6a4f";
-                        let htmlText = "";
-                        
-                        data.data.verses.forEach((v, i) => {
-                            let t = v.text;
-                            // إزالة البسملة المكررة في بداية السور لغير الفاتحة والتوبة
-                            if(num != 1 && i === 0 && t.startsWith("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ")) {
-                                t = t.replace("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "");
-                            }
-                            htmlText += t +  <span class="ayah-num">﴿${v.numberInSurah}﴾</span> ;
-                        });
-                        output.innerHTML = htmlText;})
-                    .catch(err => {
-                        status.innerHTML = "❌ فشل اتصال الإنترنت لجلب هذه السورة";
-                        status.style.color = "#d32f2f";
-                        output.innerHTML = عذراً، حدث خطأ أثناء محاولة جلب السورة أونلاين.<br><br><b>نصيحة دكتور إبراهيم:</b> اختبر سورة الفاتحة أو سورة الإخلاص في القائمة للتأكد من أن التطبيق يعمل بشكل ممتاز ومستقر أوفلاين وبدون شبكة.;
-                    });
-            });
-        });
-    </script>
 </body>
 </html>
