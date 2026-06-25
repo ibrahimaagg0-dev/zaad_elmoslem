@@ -3,93 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المصحف الشريف - زاد المسلم</title>
-    <link rel="stylesheet" href="style.css">
+    <title>المصحف الشريف</title>
     <style>
-        .back-link { display: inline-block; margin: 15px 0; color: #2d6a4f; text-decoration: none; font-weight: bold; font-size: 1.1rem; }
-        .selector-container { margin: 20px 0; text-align: center; }
-        .surah-select { padding: 12px 20px; font-size: 1.1rem; border-radius: 10px; border: 2px solid #2d6a4f; background-color: white; width: 100%; max-width: 300px; font-family: inherit; font-weight: bold; color: #1b4332; cursor: pointer; }
-        .quran-container { background: #fefefe; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-top: 20px; border-top: 5px solid #2d6a4f; }
-        .bismillah { text-align: center; font-size: 1.8rem; color: #2d6a4f; margin-bottom: 25px; font-weight: bold; }
-        .quran-text { font-size: 1.6rem; line-height: 2.5; text-align: justify; color: #1b4332; word-spacing: 2px; }
-        .ayah-num { color: #2d6a4f; font-weight: bold; font-size: 1.2rem; margin: 0 5px; display: inline-block; }
-        .status-message { text-align: center; color: #2d6a4f; font-weight: bold; font-size: 1.2rem; margin-top: 20px; padding: 15px; background: #e8f5e9; border-radius: 10px; display: none; }
-        .error-message { color: #d32f2f; background: #ffebee; }
+        body { font-family: sans-serif; padding: 20px; background: #f4f7f5; }
+        select { width: 100%; padding: 15px; font-size: 1.2rem; margin-bottom: 20px; border-radius: 10px; }
+        #output { background: white; padding: 20px; border-radius: 10px; min-height: 100px; }
+        .ayah { line-height: 2; font-size: 1.5rem; }
     </style>
 </head>
 <body>
 
-    <header class="main-header">
-        <h1>المصحف الشريف</h1>
-        <p>قراءة وتدبر سور القرآن الكريم كاملة</p>
-    </header>
+    <select id="s" onchange="getAyat(this.value)">
+        <option value="">اختر السورة...</option>
+        <option value="1">1. الفاتحة</option>
+        <option value="36">36. يس</option>
+        <option value="112">112. الإخلاص</option>
+    </select>
 
-    <div class="container">
-        <a href="index.html" class="back-link">⬅️ العودة للرئيسية</a>
-
-        <!-- قائمة اختيار السورة -->
-        <div class="selector-container">
-            <select id="surah-selector" class="surah-select" onchange="loadSurah(this.value)">
-                <option value="">اختر السورة...</option>
-            </select>
-        </div>
-
-        <div id="status-box" class="status-message"></div>
-
-        <!-- مكان عرض الآيات -->
-        <div id="quran-view" class="quran-container" style="display: none;">
-            <div id="bismillah-text" class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-            <p id="surah-text-content" class="quran-text"></p>
-        </div>
-    </div>
+    <div id="output">انتظر اختيار السورة...</div>
 
     <script>
-        // مصفوفة الـ 114 سورة كاملة محفورة جوه الكود عشان يستحيل تختفي
-        const names = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
-        
-        const selector = document.getElementById('surah-selector');
-        const quranView = document.getElementById('quran-view');
-        const surahTextContent = document.getElementById('surah-text-content');
-        const bismillahText = document.getElementById('bismillah-text');
-        const statusBox = document.getElementById('status-box');// توليد القائمة فوراً وبدون انتظار الإنترنت
-        names.forEach((name, i) => {
-            let opt = document.createElement('option');
-            opt.value = i + 1;
-            opt.textContent = ${i + 1}. سورة ${name};
-            selector.appendChild(opt);
-        });
-
-        function loadSurah(num) {
-            if(!num) { quranView.style.display = 'none'; statusBox.style.display = 'none'; return; }
-            quranView.style.display = 'none';
+        function getAyat(num) {
+            if(!num) return;
+            const div = document.getElementById('output');
+            div.innerHTML = "جاري التحميل... (تأكد من النت)";
             
-            statusBox.style.display = 'block';
-            statusBox.classList.remove('error-message');
-            statusBox.textContent = "جاري تحميل آيات السورة العظيمة... 📖";
-
-            fetch(https://api.alquran.cloud/v1/surah/${num})
-                .then(res => res.json())
-                .then(data => {
-                    statusBox.style.display = 'none';
-                    if(data.code === 200) {
-                        quranView.style.display = 'block';
-                        bismillahText.style.display = (num == 1 || num == 9) ? 'none' : 'block';
-                        let txt = "";
-                        data.data.verses.forEach((ayah, i) => {
-                            let t = ayah.text;
-                            if(num != 1 && i === 0 && t.startsWith("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ")) {
-                                t = t.replace("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "");
-                            }
-                            txt += t +  <span class="ayah-num">﴿${ayah.numberInSurah}﴾</span> ;
-                        });
-                        surahTextContent.innerHTML = txt;
-                    }
+            fetch('https://api.alquran.cloud/v1/surah/' + num)
+                .then(r => r.json())
+                .then(d => {
+                    let text = "";
+                    d.data.verses.forEach(v => { text += v.text + " "; });
+                    div.innerHTML = <p class='ayah'>${text}</p>;
                 })
-                .catch(() => {
-                    statusBox.style.display = 'block';
-                    statusBox.classList.add('error-message');
-                    statusBox.textContent = "تأكد من تشغيل الإنترنت لجلب الآيات.";
-                });
+                .catch(e => { div.innerHTML = "خطأ في الاتصال بالسيرفر. جرب مرة أخرى."; });
         }
     </script>
 </body>
