@@ -21,7 +21,7 @@
             background: linear-gradient(135deg, var(--primary), var(--accent));
             color: white;
             text-align: center;
-            padding: 25px 20px;
+            padding: 30px 20px;
             border-bottom-left-radius: 25px;
             border-bottom-right-radius: 25px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -29,62 +29,56 @@
         .header h2 { margin: 0; font-size: 1.8rem; }
         
         .container {
-            padding: 15px;
-            max-width: 600px;
+            padding: 20px;
+            max-width: 500px;
             margin: 0 auto;
             text-align: center;
         }
         .btn-back {
             display: inline-block;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             color: var(--accent);
             text-decoration: none;
             font-weight: bold;
+            font-size: 1.1rem;
         }
-        .mobile-book-card {
+        .quran-card {
             background: white;
-            padding: 30px 20px;
+            padding: 35px 20px;
             border-radius: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            margin: 20px auto;
+            margin-top: 20px;
             border-top: 5px solid var(--accent);
         }
-        .btn-open-pdf {
+        .btn-open {
             background: linear-gradient(135deg, var(--accent), var(--primary));
             color: white;
             text-decoration: none;
-            padding: 16px 25px;
+            padding: 18px 30px;
             border-radius: 50px;
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             display: block;
-            margin: 15px auto;
-            box-shadow: 0 4px 12px rgba(45, 106, 79, 0.2);
-        }
-        .btn-secondary {
-            background: #fff;
-            color: #2d6a4f;
-            border: 2px solid #2d6a4f;
+            margin-top: 25px;
+            box-shadow: 0 4px 15px rgba(45, 106, 79, 0.3);
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h2>المصحف الشريف كَامِلاً</h2>
+        <h2>المصحف الشريف كاملاً</h2>
     </div>
 
     <div class="container">
         <a href="index.html" class="btn-back">⬅️ العودة للرئيسية</a>
 
-        <div class="mobile-book-card">
-            <div style="font-size: 3.5rem; margin-bottom: 10px;">📖</div>
-            <h3>قراءة القرآن الكريم كاملاً</h3>
-            <p style="color: #666; font-size: 0.9rem;">تصفح المصحف الشريف الآن من خلال السيرفر المباشر أو قم بتحميل ملفك الخاص.</p>
+        <div class="quran-card">
+            <div style="font-size: 4rem; margin-bottom: 15px;">📖</div>
+            <h3>تصفح المصحف بدون إنترنت</h3>
+            <p style="color: #666; font-size: 0.95rem; line-height: 1.6;">اضغط على الزر بالأسفل لفتح المصحف الشريف مباشرة من ذاكرة جهازك، يمكنك تصفحه وقراءته في أي وقت وأي مكان دون الحاجة لشبكة.</p>
             
-            <a href="quran.pdf" target="_blank" class="btn-open-pdf">📥 الزر الأول: فتح مصحفك الخاص</a>
-            
-            <a href="https://archive.org/download/Quran-Pdf/quran.pdf" target="_blank" class="btn-open-pdf btn-secondary">⚡ الزر الثاني: سيرفر خارجي سريع ومضمون</a>
+            <a href="quran.pdf" target="_blank" class="btn-open">قراءة القرآن الكريم ⚡</a>
         </div>
     </div>
 
