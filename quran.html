@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -44,22 +44,34 @@
             font-size: 1rem;
             float: right;
         }
+        
+        /* كارت القراءة المخصص للموبايل */
+        .mobile-book-card {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin: 30px auto;
+            border-top: 5px solid var(--accent);
+        }
+        .book-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
         .btn-open-pdf {
-            background-color: var(--accent);
+            background: linear-gradient(135deg, var(--accent), var(--primary));
             color: white;
             text-decoration: none;
-            padding: 15px 20px;
-            border-radius: 12px;
+            padding: 16px 30px;
+            border-radius: 50px;
             font-weight: bold;
             font-size: 1.2rem;
-            margin: 20px auto;
             display: inline-block;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: background 0.2s;
+            box-shadow: 0 4px 15px rgba(45, 106, 79, 0.3);
+            margin-top: 15px;
         }
-        .btn-open-pdf:hover {
-            background-color: var(--primary);
-        }
+        
+        /* إطار عرض الـ PDF المخصص للشاشات الكبيرة */
         .pdf-viewer-container {
             width: 100%;
             height: 75vh;
@@ -67,19 +79,21 @@
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             border: 2px solid var(--accent);
-            margin-top: 10px;
+            margin-top: 20px;
             background: #fff;
+            display: block; /* يظهر على الكمبيوتر */
         }
         iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
-        .note {
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 15px;
-            line-height: 1.5;
+
+        /* 📱 حركة الـ CSS السحرية للموبايل */
+        @media (max-width: 768px) {
+            .pdf-viewer-container {
+                display: none; /* إخفاء المربع الفاضي تماماً على الموبايل */
+            }
         }
     </style>
 </head>
@@ -87,22 +101,23 @@
 
     <div class="header">
         <h2>المصحف الشريف كَامِلاً</h2>
-        <p>زاد المسلم - تصفح وقراءة القرآن الكريم بخط واضح</p>
+        <p>زاد المسلم - تصفح وقراءة القرآن الكريم</p>
     </div>
 
     <div class="container">
         <a href="index.html" class="btn-back">⬅️ العودة للرئيسية</a>
         <div style="clear: both;"></div>
 
-        <a href="quran.pdf" target="_blank" class="btn-open-pdf">📖 اضغط هنا لفتح المصحف في شاشة كاملة</a>
+        <div class="mobile-book-card">
+            <div class="book-icon">📖</div>
+            <h3>تصفح المصحف الشريف كاملاً</h3>
+            <p style="color: #666; font-size: 0.95rem; margin-bottom: 20px;">اضغط على الزر أدناه لفتح نسخة المصحف الشريف عالية الجودة، متاح التكبير والقراءة الليلية وسلسة التنقل.</p>
+            <a href="quran.pdf" class="btn-open-pdf">اضغط هنا لبدء القراءة الفورية</a>
+        </div>
 
         <div class="pdf-viewer-container">
             <iframe src="quran.pdf"></iframe>
         </div>
-
-        <p class="note">
-            💡 <b>تنويه مريح:</b> تصفح المصحف مباشرة من المربع بالأعلى، أو اضغط على الزر الأخضر الكبير لفتح المصحف في صفحة مستقلة كاملة لتكبير الحروف والقراءة براحتك وبأعلى جودة.
-        </p>
     </div>
 
 </body>
