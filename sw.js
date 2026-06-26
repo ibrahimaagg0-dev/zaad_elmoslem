@@ -1,4 +1,4 @@
-const cacheName = 'zaad-offline-pdf-v1'; // اسم كاش جديد ونظيف
+const cacheName = 'zaad-smart-offline-v1';
 const assets = [
   './',
   './index.html',
@@ -7,11 +7,10 @@ const assets = [
   './icon.png',
   './sabah.html',
   './masa.html',
-  './quran.html',
-  './quran.pdf' // حفرنا ملف المصحف الـ PDF هنا عشان ينزل جوه ذاكرة تليفونك ويشتغل بدون نت 🚀
+  './quran.html'
 ];
 
-// تثبيت التطبيق وتحميل الملفات في ذاكرة الجهاز العميقة
+// 1. التثبيت السريع للموقع بدون حظر بسبب الـ PDF الكبير
 self.addEventListener('install', e => {
   self.skipWaiting();
   e.waitUntil(
@@ -21,7 +20,7 @@ self.addEventListener('install', e => {
   );
 });
 
-// مسح أي كاش قديم لتنظيف المتصفح فوراً
+// 2. تنظيف مخلفات الكاش القديم تماماً
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys => {
@@ -36,11 +35,32 @@ self.addEventListener('activate', e => {
   );
 });
 
-// تشغيل الموقع وقراءة الملفات من ذاكرة الجهاز مباشرة (حتى لو النت مقفول)
+// 3. ذكاء جلب الملفات: الملفات العادية أوفلاين، والـ PDF كاش ديناميكي فور الفتح
 self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(res => {
-      return res || fetch(e.request);
-    })
-  );
+  if (e.request.url.includes('quran.pdf')) {
+    // إستراتيجية الكاش الديناميكي للمصحف الكبير
+    e.respondWith(
+      caches.match(e.request).then(cachedResponse => {
+        if (cachedResponse) {
+          return cachedResponse; // لو محفوظ جوه التليفون افتحه فوراً
+        }
+        return fetch(e.request).then(networkResponse => {
+          if (networkResponse && networkResponse.status === 200) {
+            const cacheCopy = networkResponse.clone();
+            caches.open(cacheName).then(cache => {
+              cache.put(e.request, cacheCopy); // حفظه في الذاكرة العميقة تلقائياً
+            });
+          }
+          return networkResponse;
+        });
+      })
+    );
+  } else {
+    // بقية ملفات الموقع العادية أوفلاين
+    e.respondWith(
+      caches.match(e.request).then(res => {
+        return res || fetch(e.request);
+      })
+    );
+  }
 });
