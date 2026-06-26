@@ -1,16 +1,30 @@
-const cacheName = 'zaad-smart-offline-v1';
+const cacheName = 'zaad-ultimate-offline-v3';
 const assets = [
   './',
   './index.html',
-  './style.css',
+  './quran.html',
+  './quran.pdf',
+  './page/azkar.html',
+  './page/hadith.html',
+  './page/tafseer.html',
+  
+  // 🎨 حفظ ملفات الـ CSS عشان شكل الموقع ميبوظش وأنت قاطع نت
+  './CSS/bootstrap.css',
+  './CSS/style.css',
+  './CSS/navPage.css',
+  
+  // 💻 حفظ ملفات الـ JS عشان الأكواد ومواقيت الصلاة تشتغل أوفلاين 100%
+  './JS/jquery-3.6.0.min.js',
+  './JS/popper.min.js',
+  './JS/bootstrap.js',
+  './JS/script.js',
+  
+  // حفظ المانيفست والأيقونة
   './manifest.json',
-  './icon.png',
-  './sabah.html',
-  './masa.html',
-  './quran.html'
+  './photo/icon1.png'
 ];
 
-// 1. التثبيت السريع للموقع بدون حظر بسبب الـ PDF الكبير
+// 1. تثبيت التطبيق وحفظ كل ملفات النظام في ذاكرة التليفون
 self.addEventListener('install', e => {
   self.skipWaiting();
   e.waitUntil(
@@ -20,7 +34,7 @@ self.addEventListener('install', e => {
   );
 });
 
-// 2. تنظيف مخلفات الكاش القديم تماماً
+// 2. طرد أي كاش قديم وتنظيف المتصفح فوراً
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys => {
@@ -35,32 +49,11 @@ self.addEventListener('activate', e => {
   );
 });
 
-// 3. ذكاء جلب الملفات: الملفات العادية أوفلاين، والـ PDF كاش ديناميكي فور الفتح
+// 3. تشغيل الموقع بالكامل من الذاكرة الداخلية عند انقطاع الشبكة
 self.addEventListener('fetch', e => {
-  if (e.request.url.includes('quran.pdf')) {
-    // إستراتيجية الكاش الديناميكي للمصحف الكبير
-    e.respondWith(
-      caches.match(e.request).then(cachedResponse => {
-        if (cachedResponse) {
-          return cachedResponse; // لو محفوظ جوه التليفون افتحه فوراً
-        }
-        return fetch(e.request).then(networkResponse => {
-          if (networkResponse && networkResponse.status === 200) {
-            const cacheCopy = networkResponse.clone();
-            caches.open(cacheName).then(cache => {
-              cache.put(e.request, cacheCopy); // حفظه في الذاكرة العميقة تلقائياً
-            });
-          }
-          return networkResponse;
-        });
-      })
-    );
-  } else {
-    // بقية ملفات الموقع العادية أوفلاين
-    e.respondWith(
-      caches.match(e.request).then(res => {
-        return res || fetch(e.request);
-      })
-    );
-  }
+  e.respondWith(
+    caches.match(e.request).then(res => {
+      return res || fetch(e.request);
+    })
+  );
 });
