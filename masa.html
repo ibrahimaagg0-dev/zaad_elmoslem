@@ -3,128 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أذكار المساء</title>
+    <title>أذكار المساء - زاد المسلم</title>
     <style>
-        :root {
-            --primary-color: #2d6a4f;
-            --secondary-color: #d8f3dc;
-            --accent-color: #52b788;
-            --text-color: #1b4332;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        h1 {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 10px;
-        }
-
-        .container {
-            max-width: 600px;
-            width: 100%;
-        }
-
-        .dhikr-card {
-            background: white;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border-right: 5px solid var(--primary-color);
-            transition: transform 0.2s;
-        }
-
-        .dhikr-text {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-
-        .controls {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .counter {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .btn-count {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .btn-count:active {
-            background-color: var(--accent-color);
-        }
-
-        .btn-reset {
-            background-color: #e9ecef;
-            color: #6c757d;
-        }
+        :root { --primary: #1b4332; --accent: #2d6a4f; --bg: #f4f7f5; }
+        body { background-color: var(--bg); font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; color: #2d312e; }
+        .header { background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; text-align: center; padding: 25px 20px; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; }
+        .container { padding: 15px; max-width: 600px; margin: 0 auto; }
+        .btn-back { display: inline-block; margin-bottom: 15px; color: var(--accent); font-weight: bold; }
+        .zekr-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); margin: 15px 0; border-right: 5px solid var(--accent); cursor: pointer; }
+        .zekr-text { font-size: 1.25rem; line-height: 2; color: #1b4332; }
+        .zekr-fadl { font-size: 0.9rem; color: #666; background: #f9fbf9; padding: 8px; border-radius: 8px; }
+        .counter-badge { background: var(--accent); color: white; padding: 6px 15px; border-radius: 20px; font-weight: bold; margin-top: 10px; display: inline-block; }
+        .completed { border-right-color: #6c757d; background-color: #e8f5e9; }
     </style>
 </head>
 <body>
-
-    <h1>أذكار المساء</h1>
-
-    <div class="container" id="dhikr-list">
-        <!-- الذكر الأول -->
-        <div class="dhikr-card">
-            <div class="dhikr-text">أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.</div>
-            <div class="controls">
-                <button class="btn-reset" onclick="resetCounter(this)">إعادة</button>
-                <div class="counter" data-count="0">0</div>
-                <button class="btn-count" onclick="increment(this)">سبّح</button>
-            </div>
+    <div class="header"><h2>أذكار المسَاء</h2></div>
+    <div class="container">
+        <a href="../index.html" class="btn-back">⬅️ العودة للرئيسية</a>
+        
+        <div class="zekr-card" onclick="doCount(this)">
+            <p class="zekr-text">أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.</p>
+            <div class="counter-badge">المتبقي: <span class="num">1</span></div>
+        </div>
+        
+        <div class="zekr-card" onclick="doCount(this)">
+            <p class="zekr-text">اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ.</p>
+            <div class="counter-badge">المتبقي: <span class="num">4</span></div>
         </div>
 
-        <!-- الذكر الثاني -->
-        <div class="dhikr-card">
-            <div class="dhikr-text">اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ الْمَصِيرُ.</div>
-            <div class="controls">
-                <button class="btn-reset" onclick="resetCounter(this)">إعادة</button>
-                <div class="counter" data-count="0">0</div>
-                <button class="btn-count" onclick="increment(this)">سبّح</button>
-            </div>
+        <div class="zekr-card" onclick="doCount(this)">
+            <p class="zekr-text">يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ.</p>
+            <div class="counter-badge">المتبقي: <span class="num">3</span></div>
         </div>
-    </div>
+        
+        </div>
 
     <script>
-        function increment(btn) {
-            const counterDiv = btn.parentElement.querySelector('.counter');
-            let count = parseInt(counterDiv.getAttribute('data-count'));
-            count++;
-            counterDiv.setAttribute('data-count', count);
-            counterDiv.innerText = count;
-        }
-
-        function resetCounter(btn) {
-            const counterDiv = btn.parentElement.querySelector('.counter');
-            counterDiv.setAttribute('data-count', 0);
-            counterDiv.innerText = 0;
+        function doCount(card) {
+            if(card.classList.contains('completed')) return;
+            const numSpan = card.querySelector('.num');
+            let n = parseInt(numSpan.textContent);
+            if(n > 1) { numSpan.textContent = --n; } 
+            else { card.classList.add('completed'); card.querySelector('.counter-badge').innerHTML = "✅ تَمَّتْ"; }
         }
     </script>
 </body>
