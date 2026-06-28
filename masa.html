@@ -6,45 +6,64 @@
     <title>أذكار المساء - زاد المسلم</title>
     <style>
         :root { --primary: #1b4332; --accent: #2d6a4f; --bg: #f4f7f5; }
-        body { background-color: var(--bg); font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; color: #2d312e; }
-        .header { background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; text-align: center; padding: 25px 20px; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; }
+        body { background-color: var(--bg); font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; padding: 0; color: #2d312e; }
+        .header { background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; text-align: center; padding: 20px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
         .container { padding: 15px; max-width: 600px; margin: 0 auto; }
-        .btn-back { display: inline-block; margin-bottom: 15px; color: var(--accent); font-weight: bold; }
-        .zekr-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); margin: 15px 0; border-right: 5px solid var(--accent); cursor: pointer; }
-        .zekr-text { font-size: 1.25rem; line-height: 2; color: #1b4332; }
-        .zekr-fadl { font-size: 0.9rem; color: #666; background: #f9fbf9; padding: 8px; border-radius: 8px; }
-        .counter-badge { background: var(--accent); color: white; padding: 6px 15px; border-radius: 20px; font-weight: bold; margin-top: 10px; display: inline-block; }
-        .completed { border-right-color: #6c757d; background-color: #e8f5e9; }
+        .btn-back { display: block; margin-bottom: 20px; color: var(--accent); font-weight: bold; text-decoration: none; }
+        .zekr-card { background: white; padding: 15px; border-radius: 12px; margin-bottom: 12px; border-right: 5px solid var(--accent); cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .zekr-text { font-size: 1.1rem; line-height: 1.8; margin: 0 0 8px 0; }
+        .zekr-fadl { font-size: 0.85rem; color: #666; background: #f9fbf9; padding: 5px; border-radius: 5px; }
+        .counter-badge { background: var(--accent); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; margin-top: 8px; display: inline-block; }
+        .completed { border-right-color: #6c757d; background-color: #e8f5e9; opacity: 0.7; }
     </style>
 </head>
 <body>
     <div class="header"><h2>أذكار المسَاء</h2></div>
     <div class="container">
-        <a href="../index.html" class="btn-back">⬅️ العودة للرئيسية</a>
-        
-        <div class="zekr-card" onclick="doCount(this)">
-            <p class="zekr-text">أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.</p>
-            <div class="counter-badge">المتبقي: <span class="num">1</span></div>
-        </div>
-        
-        <div class="zekr-card" onclick="doCount(this)">
-            <p class="zekr-text">اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ، وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ، أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ، وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ.</p>
-            <div class="counter-badge">المتبقي: <span class="num">4</span></div>
-        </div>
+        <!-- عدل الرابط هنا إلى index.html لو الملفين في نفس المجلد -->
+        <a href="index.html" class="btn-back">⬅️ العودة للرئيسية</a>
 
-        <div class="zekr-card" onclick="doCount(this)">
-            <p class="zekr-text">يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَى نَفْسِي طَرْفَةَ عَيْنٍ.</p>
-            <div class="counter-badge">المتبقي: <span class="num">3</span></div>
-        </div>
-        
-        </div>
+        <div id="azkar-list"></div>
+    </div>
 
     <script>
+        const azkar = [
+            {t: "آية الكرسي: اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ...", c: 1, f: "أجير من الجن حتى يصبح"},
+            {t: "قُلْ هُوَ اللَّهُ أَحَدٌ (سورة الإخلاص)", c: 3, f: "تكفيه من كل شيء"},
+            {t: "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ", c: 3, f: "تكفيه من كل شيء"},
+            {t: "قُلْ أَعُوذُ بِرَبِّ النَّاسِ", c: 3, f: "تكفيه من كل شيء"},
+            {t: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ...", c: 1, f: "مرة واحدة"},
+            {t: "اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ.", c: 1, f: "مرة واحدة"},
+            {t: "سيد الاستغفار: اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلقتني وَأَنَا عَبْدُكَ...", c: 1, f: "من قالها موقناً دخل الجنة"},
+            {t: "اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ...", c: 4, f: "أعتقه الله من النار"},
+            {t: "اللَّهُمَّ مَا أَمْسَى بِي مِنْ نِعْمَةٍ أَوْ بِأَحَدٍ مِنْ خَلْقِكَ فَمِنْكَ وَحْدَكَ...", c: 1, f: "أدى شكر ليلته"},
+            {t: "حَسْبِيَ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ ۖ عَلَيْهِ تَوَكَّلْتُ ۖ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ.", c: 7, f: "كفاه الله ما أهمه"},
+            {t: "بِسْمِ اللهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ...", c: 3, f: "لم يضره شيء"},
+            {t: "اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي...", c: 3, f: "تحفظ الصحة"},
+            {t: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ...", c: 1, f: "دعاء الحفظ الشامل"},
+            {t: "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ...", c: 3, f: "صلاح شؤون الحياة"},
+            {t: "أَمْسَيْنَا عَلَى فِطْرَةِ الْإِسْلَامِ، وَعَلَى كَلِمَةِ الْإِخْلَاصِ...", c: 1, f: "مرة واحدة"},
+            {t: "رَضِيتُ بِاللهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ نَبِيًّا.", c: 3, f: "حق على الله أن يرضيه"},
+            {t: "أَعُوذُ بِكَلِمَاتِ اللهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ.", c: 3, f: "لم تضره حمة"},
+            {t: "سُبْحَانَ اللهِ وَبِحَمْدِهِ.", c: 100, f: "حطت خطياه"},
+            {t: "اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ.", c: 10, f: "تنال شفاعته"}
+        ];
+
+        const list = document.getElementById('azkar-list');
+        azkar.forEach((item, index) => {
+            list.innerHTML += `
+            <div class="zekr-card" onclick="doCount(this)">
+                <p class="zekr-text">${item.t}</p>
+                <p class="zekr-fadl">${item.f}</p>
+                <div class="counter-badge">المتبقي: <span class="num">${item.c}</span></div>
+            </div>`;
+        });
+
         function doCount(card) {
             if(card.classList.contains('completed')) return;
-            const numSpan = card.querySelector('.num');
-            let n = parseInt(numSpan.textContent);
-            if(n > 1) { numSpan.textContent = --n; } 
+            const span = card.querySelector('.num');
+            let n = parseInt(span.textContent);
+            if(n > 1) { span.textContent = --n; }
             else { card.classList.add('completed'); card.querySelector('.counter-badge').innerHTML = "✅ تَمَّتْ"; }
         }
     </script>
