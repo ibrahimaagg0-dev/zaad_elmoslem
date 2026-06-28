@@ -3,132 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أذكار المساء - زاد المسلم</title>
+    <title>أذكار المساء</title>
     <style>
         :root {
-            --primary: #1b4332;
-            --accent: #2d6a4f;
-            --bg: #f4f7f5;
+            --primary-color: #2d6a4f;
+            --secondary-color: #d8f3dc;
+            --accent-color: #52b788;
+            --text-color: #1b4332;
         }
+
         body {
-            background-color: var(--bg);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: var(--text-color);
             margin: 0;
-            padding: 0;
-            color: #2d312e;
-            -webkit-tap-highlight-color: transparent;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .header {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: white;
-            text-align: center;
-            padding: 25px 20px;
-            border-bottom-left-radius: 25px;
-            border-bottom-right-radius: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+
+        h1 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
         }
-        .header h2 { margin: 0; font-size: 1.8rem; }
-        
+
         .container {
-            padding: 15px;
             max-width: 600px;
-            margin: 0 auto;
+            width: 100%;
         }
-        .btn-back {
-            display: inline-block;
-            margin-bottom: 15px;
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1rem;
-            float: right;
-        }
-        .zekr-card {
+
+        .dhikr-card {
             background: white;
             padding: 20px;
+            margin-bottom: 15px;
             border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
-            margin: 15px 0;
-            border-right: 5px solid var(--accent);
-            cursor: pointer;
-            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-right: 5px solid var(--primary-color);
+            transition: transform 0.2s;
         }
-        .zekr-card:active {
-            transform: scale(0.98);
+
+        .dhikr-text {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            line-height: 1.6;
         }
-        .zekr-text {
-            font-size: 1.25rem;
-            line-height: 2;
-            color: #1b4332;
-            text-align: justify;
-            margin: 0 0 10px 0;
-            font-weight: 500;
+
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        .zekr-fadl {
-            font-size: 0.9rem;
-            color: #666;
-            background: #f9fbf9;
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin: 0;
-            line-height: 1.4;
-        }
-        .counter-badge {
-            display: inline-block;
-            background: var(--accent);
-            color: white;
-            padding: 6px 15px;
-            border-radius: 20px;
+
+        .counter {
+            font-size: 1.5rem;
             font-weight: bold;
-            font-size: 0.95rem;
-            margin-top: 12px;
+            color: var(--primary-color);
         }
-        .zekr-card.completed {
-            border-right-color: #6c757d;
-            background-color: #e8f5e9;
-            opacity: 0.85;
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
         }
-        .zekr-card.completed .counter-badge {
-            background: #4caf50;
+
+        .btn-count {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-count:active {
+            background-color: var(--accent-color);
+        }
+
+        .btn-reset {
+            background-color: #e9ecef;
+            color: #6c757d;
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h2>أذكار المسَاء</h2>
+    <h1>أذكار المساء</h1>
+
+    <div class="container" id="dhikr-list">
+        <!-- الذكر الأول -->
+        <div class="dhikr-card">
+            <div class="dhikr-text">أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.</div>
+            <div class="controls">
+                <button class="btn-reset" onclick="resetCounter(this)">إعادة</button>
+                <div class="counter" data-count="0">0</div>
+                <button class="btn-count" onclick="increment(this)">سبّح</button>
+            </div>
+        </div>
+
+        <!-- الذكر الثاني -->
+        <div class="dhikr-card">
+            <div class="dhikr-text">اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ وَإِلَيْكَ الْمَصِيرُ.</div>
+            <div class="controls">
+                <button class="btn-reset" onclick="resetCounter(this)">إعادة</button>
+                <div class="counter" data-count="0">0</div>
+                <button class="btn-count" onclick="increment(this)">سبّح</button>
+            </div>
+        </div>
     </div>
 
-    <div class="container">
-        <a href="../index.html" class="btn-back">⬅️ العودة للرئيسية</a>
-        <div style="clear: both;"></div>
+    <script>
+        function increment(btn) {
+            const counterDiv = btn.parentElement.querySelector('.counter');
+            let count = parseInt(counterDiv.getAttribute('data-count'));
+            count++;
+            counterDiv.setAttribute('data-count', count);
+            counterDiv.innerText = count;
+        }
 
-        <!-- 1 -->
-        <div class="zekr-card" onclick="doCount(this)">
-            <p class="zekr-text">اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ.</p>
-            <p class="zekr-fadl">من قالها حين يمسي أُجير من الجن حتى يصبح.</p>
-            <div class="counter-badge">المتبقي: <span class="num">1</span></div>
-        </div>
-
-        <!-- 2 -->
-        <div class="zekr-card" onclick="doCount(this)">
-            <p class="zekr-text">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ {قُلْ هُوَ اللَّهُ أَحَدٌ * اللَّهُ الصَّمَدُ * لَمْ يَلِدْ وَلَمْ يُولَد * وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ}.</p><p class="zekr-fadl">تكفيه من كل شيء (3 مرات).</p>
-            <div class="counter-badge">المتبقي: <span class="num">3</span></div>
-        </div>
-
-        <!-- 3 -->
-        <div class="zekr-card" onclick="doCount(this)">
-            <p class="zekr-text">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ {قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ * مِنْ شَرِّ مَا خَلَقَ * وَمِنْ شَرِّ غَاسِقٍ إِإذَا وَقَبَ * وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ * مِنْ شَرِّ حَاسدٍ إِذَا حَسَدَ}.</p>
-            <p class="zekr-fadl">تكفيه من كل شيء (3 مرات).</p>
-            <div class="counter-badge">المتبقي: <span class="num">3</span></div>
-        </div>
-
-        <!-- 4 -->
-        <div class="zekr-card" onclick="doCount(this)">
-            <p class="zekr-text">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ {قُلْ أَعُوذُ بِرَبِّ النَّاسِ * مَلِكِ النَّاسِ * إِلَٰهِ النَّاسِ * مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ * الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ * مِنَ الْجِنَّةِ وَالنَّاسِ}.</p>
-            <p class="zekr-fadl">تكفيه من كل شيء (3 مرات).</p>
-            <div class="counter-badge">المتبقي: <span class="num">3</span></div>
-        </div>
-
-        <!-- 5 -->
-        <div class="zekr-card" onclick="doCount(this)">
+        function resetCounter(btn) {
+            const counterDiv = btn.parentElement.querySelector('.counter');
+            counterDiv.setAttribute('data-count', 0);
+            counterDiv.innerText = 0;
+        }
+    </script>
+</body>
+</html>
